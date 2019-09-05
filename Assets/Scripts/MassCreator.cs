@@ -17,8 +17,8 @@ public class MassCreator : Unit
     // Update is called once per frame
     void Update()
     {
-		RM.UpdateMass(massGenRate);
-		RM.UpdateEnergy(energyUsage);
+		RM.UpdateMass(massGenRate * Time.deltaTime);
+		RM.UpdateEnergy(energyUsage * Time.deltaTime);
     }
 
 

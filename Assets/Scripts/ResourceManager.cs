@@ -26,8 +26,8 @@ public class ResourceManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-		EText.text = ""+energy;
-		MText.text = "" + mass;
+		EText.text = ""+(int)energy;
+		MText.text = "" + (int)mass;
 		//unitCapDisp.text = "/" + currentUnits + "/" + unitCap;
 	}
 

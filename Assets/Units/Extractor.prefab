@@ -388,9 +388,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 959796676e278814ebaf60424dba224c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  task: 0
   selected: 0
   unitName: Mex
-  health: 0
 --- !u!114 &7340925052623819381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -403,10 +403,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27557ad861006fa4eac28a669ab799db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  task: 0
   selected: 0
   unitName: 
-  health: 0
-  massGenRate: 10
+  massGenRate: 1
   energyUsage: 0
   RM: {fileID: 0}
 --- !u!65 &2306401580561369295
