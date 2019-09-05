@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1464448843574357795}
   - component: {fileID: 1462299902045931136}
   - component: {fileID: 8957873574114251705}
-  - component: {fileID: 208255556550216549}
+  - component: {fileID: 4631852980496827254}
   m_Layer: 0
   m_Name: test
   m_TagString: Selectable
@@ -69,7 +69,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 11, y: 2, z: 10}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &208255556550216549
+--- !u!114 &4631852980496827254
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -78,11 +78,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 1464448843574457091}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 959796676e278814ebaf60424dba224c, type: 3}
+  m_Script: {fileID: 11500000, guid: b1a9af76e18fc954bbf01d311fbe677f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   selected: 0
-  unitName: test
+  unitName: Test
+  health: 1
+  accelerationMulti: 1
+  turnRate: 0.05
+  autoPilot: 0
+  speed: 20
 --- !u!1 &1464448843574457095
 GameObject:
   m_ObjectHideFlags: 0

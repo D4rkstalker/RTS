@@ -3,6 +3,56 @@ guid: a60ba76b5e05f104e835d1c625ce9325
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
+    100000: Camera
+    100002: Cube
+    100004: Cube.001
+    100006: Cube.002
+    100008: Cube.003
+    100010: Cube.004
+    100012: Cube.005
+    100014: Cube.006
+    100016: Cube.007
+    100018: //RootNode
+    100020: Light
+    400000: Camera
+    400002: Cube
+    400004: Cube.001
+    400006: Cube.002
+    400008: Cube.003
+    400010: Cube.004
+    400012: Cube.005
+    400014: Cube.006
+    400016: Cube.007
+    400018: //RootNode
+    400020: Light
+    2000000: Camera
+    2100000: Material
+    2300000: Cube
+    2300002: Cube.001
+    2300004: Cube.002
+    2300006: Cube.003
+    2300008: Cube.004
+    2300010: Cube.005
+    2300012: Cube.006
+    2300014: Cube.007
+    3300000: Cube
+    3300002: Cube.001
+    3300004: Cube.002
+    3300006: Cube.003
+    3300008: Cube.004
+    3300010: Cube.005
+    3300012: Cube.006
+    3300014: Cube.007
+    4300000: Cube
+    4300002: Cube.001
+    4300004: Cube.002
+    4300006: Cube.003
+    4300008: Cube.004
+    4300010: Cube.005
+    4300012: Cube.006
+    4300014: Cube.007
+    9500000: //RootNode
+    10800000: Light
     2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
@@ -57,7 +107,7 @@ ModelImporter:
     secondaryUVPackMargin: 4
     useFileScale: 1
     previousCalculatedGlobalScale: 1
-    hasPreviousCalculatedGlobalScale: 0
+    hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
