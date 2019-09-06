@@ -12,7 +12,7 @@ namespace Assets.Scripts
     {
 
         private NavMeshAgent agent;
-        public float health;
+
 
         // Start is called before the first frame update
         void Start()
@@ -23,6 +23,7 @@ namespace Assets.Scripts
         // Update is called once per frame
         void Update()
         {
+            UpdateUnit();
             //float facing = Vector3.Dot(transform.forward, (destination - transform.position).normalized);
             //Debug.Log(facing);
             if (Input.GetMouseButtonDown(1) && selected)
