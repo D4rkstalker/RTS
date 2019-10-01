@@ -12,6 +12,9 @@ public class InputController : MonoBehaviour
     private Vector2 endPos;
     public GameObject selectionBox;
     public Texture box;
+
+    private Rect selectBox;
+    private GameObject[] units;
     // Start is called before the first frame update
     void Start()
     {
@@ -38,8 +41,19 @@ public class InputController : MonoBehaviour
 
         if (Input.GetMouseButtonUp(0))
         {
+            units = GameObject.FindGameObjectsWithTag("Selectable");
+            MultiSelect();
             startPos = Vector2.zero;
             endPos = Vector2.zero;
+        }
+        selectBox = new Rect(startPos.x, Screen.height - startPos.y, endPos.x - startPos.x, -1 * ((Screen.height - startPos.y) - (Screen.height - endPos.y)));
+    }
+
+    public void MultiSelect()
+    {
+        foreach(GameObject unit in units)
+        {
+
         }
     }
 
@@ -81,7 +95,7 @@ public class InputController : MonoBehaviour
     {
         if(startPos != Vector2.zero && endPos != Vector2.zero)
         {
-            GUI.DrawTexture(new Rect(startPos.x, Screen.height - startPos.y, endPos.x - startPos.x, -1 * ((Screen.height - startPos.y )-(Screen.height-endPos.y))),box);
+            GUI.DrawTexture(selectBox,box);
         }
     }
 }

@@ -13,6 +13,9 @@ namespace Assets.Scripts
 
         private NavMeshAgent agent;
 
+        public GameObject selectionIndicator;
+
+        public int priority;
 
         // Start is called before the first frame update
         void Start()
@@ -30,6 +33,7 @@ namespace Assets.Scripts
             {
                 RightClick();
             }
+            selectionIndicator.SetActive(selected);
         }
 
         public void RightClick()
