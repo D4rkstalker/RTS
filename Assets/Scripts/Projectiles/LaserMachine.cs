@@ -10,7 +10,7 @@ namespace Lightbug.LaserMachine
 	public class LaserMachine : MonoBehaviour
 	{
 
-		struct LaserElement
+		public struct LaserElement
 		{
 			public Transform transform;
 			public LineRenderer lineRenderer;
@@ -27,7 +27,6 @@ namespace Lightbug.LaserMachine
 		public Material m_laserMaterial;
 
 		[Tooltip("This variable is true by default, all the inspector properties will be overridden.")]
-		[SerializeField] bool m_overrideExternalProperties = true;
 
 		[SerializeField] LaserProperties m_currentProperties = new LaserProperties();
 
@@ -35,8 +34,10 @@ namespace Lightbug.LaserMachine
 		bool m_active = true;
 		bool m_assignLaserMaterial;
 		bool m_assignSparks;
-
-
+		public float[] damageMulti = new float[4] { 1.0f, 1.0f, 1.0f, 1.0f };
+		public float[] piercingMulti = new float[4] { 1.0f, 1.0f, 1.0f, 1.0f };
+		public float[] baseDamage = new float[4] { 2.0f, 0.8f, 1.0f, 0.1f };
+		public DamageTypes dType;
 
 		public void SetupLaser(float beamLength)
 		{
@@ -127,20 +128,12 @@ namespace Lightbug.LaserMachine
 
 						if (hitInfo3D.collider)
 						{
-							element.lineRenderer.SetPosition(1, hitInfo3D.point);
-
-							if (m_assignSparks)
+							element.lineRenderer.SetPosition(1, hitInfo3D.point);							
+							Unit target = hitInfo3D.collider.gameObject.GetComponent<Unit>();
+							if (target.player != player)
 							{
-								element.sparks.transform.position = hitInfo3D.point; //new Vector3(rhit.point.x, rhit.point.y, transform.position.z);
-								element.sparks.transform.rotation = Quaternion.LookRotation(hitInfo3D.normal);
+								OnImpact(element, hitInfo3D, damage, target);
 							}
-
-							/*
-							EXAMPLE : In this line you can add whatever functionality you want, 
-							for example, if the hitInfoXD.collider is not null do whatever thing you wanna do to the target object.
-							DoAction();
-							*/
-
 						}
 						else
 						{
@@ -161,20 +154,43 @@ namespace Lightbug.LaserMachine
 
 				if (m_assignSparks)
 					element.sparks.SetActive(false);
-
 			}
 
 			yield return null;
 		}
 
-		/*
-		EXAMPLE : 
-		void DoAction()
+		public void OnImpact(LaserElement element, RaycastHit hitInfo3D, float damage, Unit target)
 		{
+			if (m_assignSparks)
+			{
+				element.sparks.transform.position = hitInfo3D.point; //new Vector3(rhit.point.x, rhit.point.y, transform.position.z);
+				element.sparks.transform.rotation = Quaternion.LookRotation(hitInfo3D.normal);
+			}
+			target.OnDamage(DoDamage(damage*Time.deltaTime,target));
 
 		}
-		*/
 
+		public virtual float[] DoDamage(float damage, Unit target)
+		{
+			//Shield | Armor | Hull | Crew
+			float[] fullDamage = new float[4];
+			if (target.shield > 0.0f)
+			{
+				//shield
+				fullDamage[0] = damage * damageMulti[0] * piercingMulti[0] * baseDamage[0];
+			}
+			else
+			{
+				//armor
+				fullDamage[1] = damage * damageMulti[1] * piercingMulti[1] * baseDamage[1];
+				//hull
+				fullDamage[2] = damage * damageMulti[2] * piercingMulti[2] * baseDamage[2] * (1.1f - target.armor / target.maxArmor);
+				//crew
+				fullDamage[3] = damage * damageMulti[3] * piercingMulti[3] * baseDamage[3] * (1.0f - target.armor / target.maxArmor);
+
+			}
+			return fullDamage;
+		}
 
 	}
 

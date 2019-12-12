@@ -174,13 +174,12 @@ MonoBehaviour:
   m_laserSparks: {fileID: 1225546948020356, guid: edb5087f433b7764a8a63c29ea2831e8,
     type: 3}
   m_laserMaterial: {fileID: 2100000, guid: 33398c1da1c950e418147f243c52554f, type: 2}
-  m_overrideExternalProperties: 1
   m_currentProperties:
     m_layerMask:
       serializedVersion: 2
       m_Bits: 2048
     m_physicsType: 1
-    m_rayWidth: 0.01
+    m_rayWidth: 0.2
     m_angularRange: 360
     m_raysNumber: 1
     m_minRadialDistance: 0
@@ -188,6 +187,22 @@ MonoBehaviour:
     m_rotateClockwise: 0
     m_rotationSpeed: 20
     m_initialTimingPhase: 0
+  damageMulti:
+  - 1
+  - 1
+  - 1
+  - 1
+  piercingMulti:
+  - 1
+  - 1
+  - 1
+  - 1
+  baseDamage:
+  - 2
+  - 0.8
+  - 1
+  - 0.1
+  dType: 0
 --- !u!1 &4847378444740118849
 GameObject:
   m_ObjectHideFlags: 0
