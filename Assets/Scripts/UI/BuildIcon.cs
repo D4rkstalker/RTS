@@ -1,18 +1,28 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class BuildIcon : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+	public Texture buildIcon;
+	public Unit unit;
+	public List<FactoryUnit> builders;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+	public void IssueBuildOrder()
+	{
+		
+		foreach(FactoryUnit factory in builders)
+		{
+			print("Building");
+			factory.AddToQueue(unit);
+		}
+	}
+
+
+	public void SetUpIcon()
+	{
+		gameObject.GetComponent<RawImage>().texture = buildIcon;
+	}
 }

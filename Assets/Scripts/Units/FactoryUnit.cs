@@ -14,7 +14,7 @@ public class FactoryUnit : Unit
 	public bool repeat;
 	public bool building;
 	public float buildPower;
-	public string[] buildableCategories;
+	public List<string> buildableCategories;
 	public ResourceManager resourceManager;
 	public GameObject rallypoint;
 	public MarkerMove moveMarker;
@@ -47,6 +47,11 @@ public class FactoryUnit : Unit
 		{
 			currentUnit = buildQueue[0];
 		}
+	}
+
+	public virtual void AddToQueue(Unit unit)
+	{
+		buildQueue.Add(unit);
 	}
 
 	public virtual void OnStartBuild()

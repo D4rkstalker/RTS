@@ -39,11 +39,11 @@ public class Projectile : MonoBehaviour
 
 	public virtual void OnImpact()
 	{
-		target.OnDamage(CalcDamage());
+		target.OnDamage(DoDamage());
 		Destroy(gameObject);
 	}
 
-	public virtual float[] CalcDamage()
+	public virtual float[] DoDamage()
 	{
 		//Shield | Armor | Hull | Crew
 		float[] fullDamage = new float[4];

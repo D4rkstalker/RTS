@@ -27,7 +27,8 @@ public class Unit : MonoBehaviour
 	public bool targetable = true;
 	public Unit target;
 	public Turret mainGun;
-	public string[] categories;
+	public List<string> categories;
+	public Texture icon;
 
 	public Queue<Marker> markers = new Queue<Marker>();
 

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InputController : MonoBehaviour
 {
@@ -20,46 +21,52 @@ public class InputController : MonoBehaviour
 
 	private Rect selectionBoxUI;
 	private GameObject[] units;
+	private BuildController buildController;
 	// Start is called before the first frame update
 	void Start()
 	{
 		cam = Camera.main;
+		buildController = gameObject.GetComponent<BuildController>();
 		m_Started = true;
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-		if (Input.GetMouseButtonDown(1))
-		{
-			RightClick();
-		}
+		selectedUnits.RemoveAll(item => item == null);
 
-		if (Input.GetMouseButtonDown(0))
+		if (!EventSystem.current.IsPointerOverGameObject())
 		{
-			LeftClick();
+			if (Input.GetMouseButtonDown(1))
+			{
+				RightClick();
+			}
 
-		};
-		if (Input.GetMouseButton(0) && startPos == Vector2.zero)
-		{
-			startPos = Input.mousePosition;
-		}
-		else if (Input.GetMouseButton(0) && startPos != Vector2.zero)
-		{
-			endPos = Input.mousePosition;
-		}
+			if (Input.GetMouseButtonDown(0))
+			{
+				LeftClick();
 
-		if (Input.GetMouseButtonUp(0))
-		{
-			MultiSelect(startPos, endPos);
-			startPos = Vector2.zero;
-			endPos = Vector2.zero;
-		}
-		selectionBoxUI = new Rect(startPos.x, Screen.height - startPos.y, endPos.x - startPos.x, -1 * ((Screen.height - startPos.y) - (Screen.height - endPos.y)));
+			};
+			if (Input.GetMouseButton(0) && startPos == Vector2.zero)
+			{
+				startPos = Input.mousePosition;
+			}
+			else if (Input.GetMouseButton(0) && startPos != Vector2.zero)
+			{
+				endPos = Input.mousePosition;
+			}
 
+			if (Input.GetMouseButtonUp(0))
+			{
+				MultiSelect(startPos, endPos);
+				startPos = Vector2.zero;
+				endPos = Vector2.zero;
+			}
+			selectionBoxUI = new Rect(startPos.x, Screen.height - startPos.y, endPos.x - startPos.x, -1 * ((Screen.height - startPos.y) - (Screen.height - endPos.y)));
+		}
 		if (Input.GetKeyDown(KeyCode.S))
 		{
-			foreach(Unit unit in selectedUnits)
+			foreach (Unit unit in selectedUnits)
 			{
 				unit.StopOrder();
 			}
@@ -86,13 +93,21 @@ public class InputController : MonoBehaviour
 		{
 			Deselect();
 		}
-
+		List<FactoryUnit> factories = new List<FactoryUnit>();
 		foreach (Collider selected in selections)
 		{
 			Unit selectedUnit = selected.gameObject.GetComponent<Unit>();
 			selectedUnit.selected = true;
 			selectedUnit.selectionIndicator.SetActive(true);
 			selectedUnits.Add(selectedUnit);
+			if (selectedUnit is FactoryUnit)
+			{
+				factories.Add(selectedUnit.GetComponent<FactoryUnit>());
+			}
+		}
+		if (factories.Count > 0)
+		{
+			buildController.PopulateBuildableList(factories);
 		}
 	}
 
@@ -115,7 +130,7 @@ public class InputController : MonoBehaviour
 							marker.numUnits++;
 							unit.GetComponent<MobileUnit>().AddMarker(null, marker, Input.GetKey(KeyCode.LeftShift), Tasks.Moving);
 						}
-						else if(unit is FactoryUnit)
+						else if (unit is FactoryUnit)
 						{
 							unit.GetComponent<FactoryUnit>().SetRallyPoint(marker.transform.position);
 						}
@@ -187,6 +202,7 @@ public class InputController : MonoBehaviour
 			}
 			selectedUnits.Clear();
 		}
+		buildController.ClearBuildIcons();
 	}
 
 	public void Select(GameObject selectedObject)

@@ -76,6 +76,7 @@ MonoBehaviour:
   - TDF
   - Building
   - Factory
+  icon: {fileID: 0}
   currentMarker: {fileID: 0}
   buildPoint: {fileID: 5870185074194526491}
   buildQueue: []
@@ -85,7 +86,8 @@ MonoBehaviour:
   repeat: 0
   building: 0
   buildPower: 15
-  buildableCategories: []
+  buildableCategories:
+  - TDF
   resourceManager: {fileID: 0}
   rallypoint: {fileID: 4936304081617313363}
   moveMarker: {fileID: 4507118481327387650, guid: 0b8d81f7b47e23244a4ed03cfbf8057b,
@@ -356,7 +358,7 @@ PrefabInstance:
     - target: {fileID: 4623690295600716606, guid: 1f4ebffe4cf98d349b75ff325f770db6,
         type: 3}
       propertyPath: orthographic size
-      value: 2
+      value: 6.02
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f4ebffe4cf98d349b75ff325f770db6, type: 3}

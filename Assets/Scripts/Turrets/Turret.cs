@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Assets.Scripts.Utilities;
 using Assets.Scripts;
+using Lightbug.LaserMachine;
 
 public class Turret : MonoBehaviour
 {
@@ -16,19 +17,22 @@ public class Turret : MonoBehaviour
 	public float turnRate;
 	public float maxTurnAngle;
 	public float trackRangeMulti = 1;
+	public float damage;
+	public bool mainGun;
+	public float firingTolerance = 90;
+	public Unit parentUnit;
+	public Muzzle muzzle;
+	public TurretTypes tType;
+	public WeaponTypes wType;
+	[Header("Kinetic Turret Data")]
 	public bool leadTarget = true;
 	public float projectileVelocity;
 	public float projectileLifetimeMulti = 1;
-	public float damage;
 	public float firingVariation;
-	public bool mainGun;
-	public float firingTolerance = 90;
-
-	public Unit parentUnit;
 	public Projectile projectile;
-	public Muzzle muzzle;
-
-	public TurretTypes tType;
+	[Header("Laser Turret Data")]
+	public float beamLengthMulti = 1;
+	public float beamDuration;
 
 	protected Unit targetUnit;
 	protected bool firing = false;
@@ -36,6 +40,10 @@ public class Turret : MonoBehaviour
 	void Start()
 	{
 		targetUnit = null;
+		if(wType == WeaponTypes.Beam)
+		{
+			gameObject.GetComponent<LaserMachine>().SetupLaser(maxRange * beamLengthMulti);
+		}
 	}
 
 	// Update is called once per frame
@@ -116,7 +124,7 @@ public class Turret : MonoBehaviour
 					Invoke("Fire", chargeTime);
 					yield return new WaitForSeconds(salvoFireRate);
 				}
-				yield return new WaitForSeconds(rateOfFire);
+				yield return new WaitForSeconds(rateOfFire + beamDuration);
 			}
 			yield return null;
 		}
@@ -126,16 +134,24 @@ public class Turret : MonoBehaviour
 
 	public virtual void Fire()
 	{
-		Projectile bullet = Instantiate(projectile, muzzle.transform.position, transform.rotation) as Projectile;
-		bullet.damage = damage;
-		bullet.transform.Rotate(new Vector3(0, Random.Range(firingVariation, -firingVariation), 0));
-		bullet.player = parentUnit.player;
-		bullet.timeOut *= projectileLifetimeMulti;
-		if (bullet.tracking)
+		if(wType == WeaponTypes.Kinetic)
 		{
-			bullet.target = targetUnit;
+			Projectile bullet = Instantiate(projectile, muzzle.transform.position, transform.rotation) as Projectile;
+			bullet.damage = damage;
+			bullet.transform.Rotate(new Vector3(0, Random.Range(firingVariation, -firingVariation), 0));
+			bullet.player = parentUnit.player;
+			bullet.timeOut *= projectileLifetimeMulti;
+			if (bullet.tracking)
+			{
+				bullet.target = targetUnit;
+			}
+			bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.forward * projectileVelocity, ForceMode.VelocityChange);
+
 		}
-		bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.forward * projectileVelocity, ForceMode.VelocityChange);
+		else if(wType == WeaponTypes.Beam)
+		{
+			StartCoroutine(gameObject.GetComponent<LaserMachine>().Fire(beamDuration,damage,parentUnit.player,maxRange * beamLengthMulti));
+		}
 	}
 
 
