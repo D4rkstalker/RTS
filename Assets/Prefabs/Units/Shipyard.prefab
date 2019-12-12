@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 1028080984054598082}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalScale: {x: 6, y: 6, z: 6}
   m_Children:
   - {fileID: 1506561808272262079}
   - {fileID: 260714436087135765}
@@ -64,9 +64,9 @@ MonoBehaviour:
   crew: 100
   maxCrew: 100
   turnRate: 0
-  mass: 0
+  mass: 15
   energy: 15
-  buildtime: 0
+  buildtime: 15
   player: 0
   selectionIndicator: {fileID: 5424098266113185047}
   targetable: 1
@@ -85,7 +85,7 @@ MonoBehaviour:
   paused: 0
   repeat: 0
   building: 0
-  buildPower: 15
+  buildPower: 1
   buildableCategories:
   - TDF
   resourceManager: {fileID: 0}
@@ -358,7 +358,7 @@ PrefabInstance:
     - target: {fileID: 4623690295600716606, guid: 1f4ebffe4cf98d349b75ff325f770db6,
         type: 3}
       propertyPath: orthographic size
-      value: 6.02
+      value: 10.07
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1f4ebffe4cf98d349b75ff325f770db6, type: 3}

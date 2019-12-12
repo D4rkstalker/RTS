@@ -15,8 +15,8 @@ public class BuildController : MonoBehaviour
 	public List<BuildIcon> activeBuildIcons;
 	public void PopulateBuildableList(List<FactoryUnit> factories)
 	{
-
-		buildable = gameObject.GetComponent<UnitList>().GetBuildables(factories);
+		print("Getting buildables");
+		buildable = gameObject.transform.parent.GetComponent<UnitList>().GetBuildables(factories);
 
 		foreach (Unit buildableUnit in buildable)
 		{

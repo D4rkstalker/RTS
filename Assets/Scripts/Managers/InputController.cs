@@ -20,7 +20,6 @@ public class InputController : MonoBehaviour
 	public MarkerAssist assistMarker;
 
 	private Rect selectionBoxUI;
-	private GameObject[] units;
 	private BuildController buildController;
 	// Start is called before the first frame update
 	void Start()
