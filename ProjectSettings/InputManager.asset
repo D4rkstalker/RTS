@@ -90,7 +90,7 @@ InputManager:
     descriptiveName: Horizontal
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: 
+    positiveButton: s
     altNegativeButton: 
     altPositiveButton: 
     gravity: 0
@@ -102,11 +102,11 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Vertical
-    descriptiveName: Vertical
+    m_Name: Stop
+    descriptiveName: Issue stop order
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: 
+    positiveButton: s
     altNegativeButton: 
     altPositiveButton: 
     gravity: 0
@@ -118,11 +118,11 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Submit
-    descriptiveName: Submit
+    m_Name: Stop
+    descriptiveName: Issue stop order
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: return
+    positiveButton: s
     altNegativeButton: 
     altPositiveButton: 
     gravity: 0
@@ -134,27 +134,11 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Cancel
-    descriptiveName: cancel
+    m_Name: Stop
+    descriptiveName: Issue stop order
     descriptiveNegativeName: 
     negativeButton: 
-    positiveButton: escape
-    altNegativeButton: 
-    altPositiveButton: 
-    gravity: 0
-    dead: 0
-    sensitivity: 0
-    snap: 0
-    invert: 0
-    type: 0
-    axis: 0
-    joyNum: 0
-  - serializedVersion: 3
-    m_Name: Scroll
-    descriptiveName: Scroll
-    descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: escape
+    positiveButton: s
     altNegativeButton: 
     altPositiveButton: 
     gravity: 0
