@@ -8,7 +8,7 @@ public class InputController : MonoBehaviour
 {
 	public float panSpeed;
 	public List<Unit> selectedUnits;
-	bool m_Started;
+	public bool playerEnabled = false;
 	private Vector2 startPos;
 	private Vector2 endPos;
 	private Camera cam;
@@ -26,49 +26,52 @@ public class InputController : MonoBehaviour
 	{
 		cam = Camera.main;
 		buildController = gameObject.GetComponent<BuildController>();
-		m_Started = true;
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
-		selectedUnits.RemoveAll(item => item == null);
-
-		if (!EventSystem.current.IsPointerOverGameObject())
+		if (enabled)
 		{
-			if (Input.GetButton("Right"))
+			selectedUnits.RemoveAll(item => item == null);
+
+			if (!EventSystem.current.IsPointerOverGameObject())
 			{
-				RightClick();
+				if (Input.GetButton("Right"))
+				{
+					RightClick();
+				}
+
+				if (Input.GetButton("Left"))
+				{
+					LeftClick();
+
+				};
+				if (Input.GetButton("Left") && startPos == Vector2.zero)
+				{
+					startPos = Input.mousePosition;
+				}
+				else if (Input.GetButton("Left") && startPos != Vector2.zero)
+				{
+					endPos = Input.mousePosition;
+				}
+
+				if (Input.GetButtonUp("Left"))
+				{
+					MultiSelect(startPos, endPos);
+					startPos = Vector2.zero;
+					endPos = Vector2.zero;
+				}
+				selectionBoxUI = new Rect(startPos.x, Screen.height - startPos.y, endPos.x - startPos.x, -1 * ((Screen.height - startPos.y) - (Screen.height - endPos.y)));
+			}
+			if (Input.GetButton("Stop"))
+			{
+				foreach (Unit unit in selectedUnits)
+				{
+					unit.StopOrder();
+				}
 			}
 
-			if (Input.GetButton("Left"))
-			{
-				LeftClick();
-
-			};
-			if (Input.GetButton("Left") && startPos == Vector2.zero)
-			{
-				startPos = Input.mousePosition;
-			}
-			else if (Input.GetButton("Left") && startPos != Vector2.zero)
-			{
-				endPos = Input.mousePosition;
-			}
-
-			if (Input.GetButtonUp("Left"))
-			{
-				MultiSelect(startPos, endPos);
-				startPos = Vector2.zero;
-				endPos = Vector2.zero;
-			}
-			selectionBoxUI = new Rect(startPos.x, Screen.height - startPos.y, endPos.x - startPos.x, -1 * ((Screen.height - startPos.y) - (Screen.height - endPos.y)));
-		}
-		if (Input.GetButton("Stop"))
-		{
-			foreach (Unit unit in selectedUnits)
-			{
-				unit.StopOrder();
-			}
 		}
 	}
 

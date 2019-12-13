@@ -64,9 +64,9 @@ namespace SimpleHealthBar_SpaceshipExample
 
 				// Modify the score.
 				if( health <= 0 )
-					GameManager.Instance.ModifyScore( isDebris == true ? "Debris" : "Asteroid" );
+					AsteroidManager.Instance.ModifyScore( isDebris == true ? "Debris" : "Asteroid" );
 				else
-					GameManager.Instance.ModifyScore();
+					AsteroidManager.Instance.ModifyScore();
 			}
 			// Else if the collision was from the player...
 			else if( theCollision.gameObject.name == "Player" )
@@ -91,7 +91,7 @@ namespace SimpleHealthBar_SpaceshipExample
 			}
 
 			// Spawn an explosion particle.
-			GameManager.Instance.SpawnExplosion( theCollision.transform.position );
+			AsteroidManager.Instance.SpawnExplosion( theCollision.transform.position );
 		}
 
 		void Explode ()
@@ -104,7 +104,7 @@ namespace SimpleHealthBar_SpaceshipExample
 			isDestroyed = true;
 
 			// Spawn some debris from this asteroids position.
-			GameManager.Instance.SpawnDebris( transform.position );
+			AsteroidManager.Instance.SpawnDebris( transform.position );
 
 			// Destroy this asteroid.
 			Destroy( gameObject );

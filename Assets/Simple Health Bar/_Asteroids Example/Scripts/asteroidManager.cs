@@ -6,11 +6,11 @@ using UnityEngine.UI;
 
 namespace SimpleHealthBar_SpaceshipExample
 {
-	public class GameManager : MonoBehaviour
+	public class AsteroidManager : MonoBehaviour
 	{
 		// Static Refs //
-		private static GameManager instance;
-		public static GameManager Instance{ get { return instance; } }
+		private static AsteroidManager instance;
+		public static AsteroidManager Instance{ get { return instance; } }
 
 		// Prefabs //
 		[Header( "Prefabs" )]
@@ -65,7 +65,7 @@ namespace SimpleHealthBar_SpaceshipExample
 			}
 
 			// Assign the instance variable as the Game Manager script on this object.
-			instance = GetComponent<GameManager>();
+			instance = GetComponent<AsteroidManager>();
 		}
 
 		void Start ()

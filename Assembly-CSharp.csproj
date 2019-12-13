@@ -90,6 +90,7 @@
     <Compile Include="Assets\Scripts\Defines\WeaponTypes.cs" />
     <Compile Include="Assets\Scripts\Managers\BuildController.cs" />
     <Compile Include="Assets\Scripts\Managers\CameraControl.cs" />
+    <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
     <Compile Include="Assets\Scripts\Managers\InputController.cs" />
     <Compile Include="Assets\Scripts\Managers\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\Managers\UIUpdates.cs" />
@@ -117,7 +118,7 @@
     <Compile Include="Assets\Scripts\Units\UnitList.cs" />
     <Compile Include="Assets\Scripts\Utilities\Utilities.cs" />
     <Compile Include="Assets\Simple Health Bar\_Asteroids Example\Scripts\AsteroidController.cs" />
-    <Compile Include="Assets\Simple Health Bar\_Asteroids Example\Scripts\GameManager.cs" />
+    <Compile Include="Assets\Simple Health Bar\_Asteroids Example\Scripts\asteroidManager.cs" />
     <Compile Include="Assets\Simple Health Bar\_Asteroids Example\Scripts\HealthPickupController.cs" />
     <Compile Include="Assets\Simple Health Bar\_Asteroids Example\Scripts\PlayerController.cs" />
     <Compile Include="Assets\Simple Health Bar\_Asteroids Example\Scripts\PlayerHealth.cs" />

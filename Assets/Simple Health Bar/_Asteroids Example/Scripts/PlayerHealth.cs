@@ -133,7 +133,7 @@ namespace SimpleHealthBar_SpaceshipExample
 		public void Death ()
 		{
 			// Show the death screen, and disable the player's control.
-			GameManager.Instance.ShowDeathScreen();
+			AsteroidManager.Instance.ShowDeathScreen();
 			GetComponent<PlayerController>().canControl = false;
 
 			// Spawn an explosion particle effect and the player's current position.

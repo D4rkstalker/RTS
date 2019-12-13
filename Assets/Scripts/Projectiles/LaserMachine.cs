@@ -72,8 +72,8 @@ namespace Lightbug.LaserMachine
 				newObj.GetComponent<LineRenderer>().shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
 				newObj.GetComponent<LineRenderer>().startWidth = m_currentProperties.m_rayWidth;
 				newObj.GetComponent<LineRenderer>().useWorldSpace = true;
-				newObj.GetComponent<LineRenderer>().SetPosition(0, newObj.transform.position);
-				newObj.GetComponent<LineRenderer>().SetPosition(1, newObj.transform.position + transform.forward * beamLength);
+				//newObj.GetComponent<LineRenderer>().SetPosition(0, newObj.transform.position);
+				//newObj.GetComponent<LineRenderer>().SetPosition(1, newObj.transform.position + transform.forward * beamLength);
 				newObj.transform.SetParent(transform);
 
 				if (m_assignSparks)

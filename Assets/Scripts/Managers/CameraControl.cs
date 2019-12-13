@@ -26,7 +26,6 @@ public class CameraControl : MonoBehaviour
 	void Update()
 	{
 		MoveCamera();
-		print(Input.GetAxis("Mouse ScrollWheel"));
 	}
 	void MoveCamera()
 	{
