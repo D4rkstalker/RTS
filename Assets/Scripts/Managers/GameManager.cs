@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour
 		foreach (Transform child in gameObject.transform)
 		{
 			playerControllers.Add(child.gameObject);
+			child.gameObject.GetComponent<InputController>().enabled = false;
+			child.gameObject.GetComponent<UIUpdates>().enabled = false;
 		}
 	}
 
@@ -19,9 +21,10 @@ public class GameManager : MonoBehaviour
     {
 		foreach(GameObject player in playerControllers)
 		{
-			if(player.GetComponent<Player>().playerID != activePlayer)
+			if(player.GetComponent<Player>().playerID == activePlayer)
 			{
-				player.GetComponent<InputController>().playerEnabled = false;
+				player.GetComponent<InputController>().enabled = true;
+				player.GetComponent<UIUpdates>().enabled = true;
 			}
 		}
     }

@@ -110,6 +110,8 @@
     <Compile Include="Assets\Scripts\UI\MarkerAssist.cs" />
     <Compile Include="Assets\Scripts\UI\MarkerAttack.cs" />
     <Compile Include="Assets\Scripts\UI\MarkerMove.cs" />
+    <Compile Include="Assets\Scripts\UI\StrategicIcon.cs" />
+    <Compile Include="Assets\Scripts\UI\UnitUI.cs" />
     <Compile Include="Assets\Scripts\Units\Buildpoint.cs" />
     <Compile Include="Assets\Scripts\Units\FactoryUnit.cs" />
     <Compile Include="Assets\Scripts\Units\MassCreator.cs" />

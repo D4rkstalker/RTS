@@ -74,6 +74,7 @@ namespace Lightbug.LaserMachine
 				newObj.GetComponent<LineRenderer>().useWorldSpace = true;
 				//newObj.GetComponent<LineRenderer>().SetPosition(0, newObj.transform.position);
 				//newObj.GetComponent<LineRenderer>().SetPosition(1, newObj.transform.position + transform.forward * beamLength);
+				newObj.GetComponent<LineRenderer>().enabled = false;
 				newObj.transform.SetParent(transform);
 
 				if (m_assignSparks)
