@@ -36,26 +36,26 @@ public class InputController : MonoBehaviour
 
 		if (!EventSystem.current.IsPointerOverGameObject())
 		{
-			if (Input.GetMouseButtonDown(1))
+			if (Input.GetButton("Right"))
 			{
 				RightClick();
 			}
 
-			if (Input.GetMouseButtonDown(0))
+			if (Input.GetButton("Left"))
 			{
 				LeftClick();
 
 			};
-			if (Input.GetMouseButton(0) && startPos == Vector2.zero)
+			if (Input.GetButton("Left") && startPos == Vector2.zero)
 			{
 				startPos = Input.mousePosition;
 			}
-			else if (Input.GetMouseButton(0) && startPos != Vector2.zero)
+			else if (Input.GetButton("Left") && startPos != Vector2.zero)
 			{
 				endPos = Input.mousePosition;
 			}
 
-			if (Input.GetMouseButtonUp(0))
+			if (Input.GetButtonUp("Left"))
 			{
 				MultiSelect(startPos, endPos);
 				startPos = Vector2.zero;
@@ -63,7 +63,7 @@ public class InputController : MonoBehaviour
 			}
 			selectionBoxUI = new Rect(startPos.x, Screen.height - startPos.y, endPos.x - startPos.x, -1 * ((Screen.height - startPos.y) - (Screen.height - endPos.y)));
 		}
-		if (Input.GetKeyDown(KeyCode.S))
+		if (Input.GetButton("Stop"))
 		{
 			foreach (Unit unit in selectedUnits)
 			{
@@ -88,7 +88,7 @@ public class InputController : MonoBehaviour
 		LayerMask mask = LayerMask.GetMask("Units");
 		Collider[] selections = Physics.OverlapBox(center, halfExtends, new Quaternion(), mask);
 
-		if (!Input.GetKey(KeyCode.LeftShift))
+		if (!Input.GetButton("Shift"))
 		{
 			Deselect();
 		}
@@ -127,7 +127,7 @@ public class InputController : MonoBehaviour
 						if (unit is MobileUnit)
 						{
 							marker.numUnits++;
-							unit.GetComponent<MobileUnit>().AddMarker(null, marker, Input.GetKey(KeyCode.LeftShift), Tasks.Moving);
+							unit.GetComponent<MobileUnit>().AddMarker(null, marker, Input.GetButton("Shift"), Tasks.Moving);
 						}
 						else if (unit is FactoryUnit)
 						{
@@ -147,7 +147,7 @@ public class InputController : MonoBehaviour
 						marker.attackers = selectedUnits;
 						foreach (Unit unit in selectedUnits)
 						{
-							unit.GetComponent<MobileUnit>().AddMarker(target, marker, Input.GetKey(KeyCode.LeftShift), Tasks.Attacking);
+							unit.GetComponent<MobileUnit>().AddMarker(target, marker, Input.GetButton("Shift"), Tasks.Attacking);
 						}
 					}
 					else
@@ -156,7 +156,7 @@ public class InputController : MonoBehaviour
 						marker.numUnits = selectedUnits.Count;
 						foreach (Unit unit in selectedUnits)
 						{
-							unit.GetComponent<MobileUnit>().AddMarker(target, marker, Input.GetKey(KeyCode.LeftShift), Tasks.Assisting);
+							unit.GetComponent<MobileUnit>().AddMarker(target, marker, Input.GetButton("Shift"), Tasks.Assisting);
 						}
 
 					}
@@ -175,7 +175,7 @@ public class InputController : MonoBehaviour
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit, 100))
 		{
-			if (hit.collider.tag == "Ground" && !Input.GetKey(KeyCode.LeftShift))
+			if (hit.collider.tag == "Ground" && !Input.GetButton("Shift"))
 			{
 				Deselect();
 			}
@@ -208,7 +208,7 @@ public class InputController : MonoBehaviour
 	{
 		Unit unit = selectedObject.GetComponent<Unit>();
 		unit.selected = true;
-		if (Input.GetKey(KeyCode.LeftShift))
+		if (Input.GetButton("Shift"))
 		{
 			unit.selectionIndicator.SetActive(true);
 			selectedUnits.Add(unit);
