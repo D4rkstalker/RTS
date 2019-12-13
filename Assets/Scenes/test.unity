@@ -3444,11 +3444,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shipyard
       objectReference: {fileID: 0}
-    - target: {fileID: 5716045697347229905, guid: f4d36ce3488ffbd4882c4a7291710479,
-        type: 3}
-      propertyPath: player
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4043990494730943441, guid: f4d36ce3488ffbd4882c4a7291710479,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3504,6 +3499,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5716045697347229905, guid: f4d36ce3488ffbd4882c4a7291710479,
+        type: 3}
+      propertyPath: player
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3848095873525613310, guid: f4d36ce3488ffbd4882c4a7291710479, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f4d36ce3488ffbd4882c4a7291710479, type: 3}
@@ -3530,11 +3530,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: SDShipyard
-      objectReference: {fileID: 0}
-    - target: {fileID: 757338219061877457, guid: 169e653354b424147b25065372334718,
-        type: 3}
-      propertyPath: buildableCategories.Array.size
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7352186452665180535, guid: 169e653354b424147b25065372334718,
         type: 3}
@@ -3590,6 +3585,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 757338219061877457, guid: 169e653354b424147b25065372334718,
+        type: 3}
+      propertyPath: buildableCategories.Array.size
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 169e653354b424147b25065372334718, type: 3}
