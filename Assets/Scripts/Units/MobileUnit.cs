@@ -8,10 +8,10 @@ using UnityEngine.AI;
 
 namespace Assets.Scripts
 {
-    class MobileUnit : Unit
+    public class MobileUnit : Unit
     {
-
-        public NavMeshAgent agent;
+		[System.NonSerialized]
+		public NavMeshAgent agent;
 
         public int priority;
 
@@ -26,11 +26,14 @@ namespace Assets.Scripts
 		public override void UpdateUnit()
 		{
 			base.UpdateUnit();
-			if(target != null && (task == Tasks.Attacking || task == Tasks.Idle))
+			if (!isBeingbuilt)
 			{
-				AttackUpdate();				
-			}
+				if (target != null && (task == Tasks.Attacking || task == Tasks.Idle))
+				{
+					AttackUpdate();
+				}
 
+			}
 		}
 
 		public override void CheckMarker(Marker marker)

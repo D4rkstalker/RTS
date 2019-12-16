@@ -6,33 +6,27 @@ using UnityEngine.UI;
 
 public class Unit : MonoBehaviour
 {
-	public GameObject iconCam;
-	public Tasks task;
-	public bool selected = false;
-	public string unitName;
-	public float shield = 0;
-	public float maxShield = 0;
-	public float armor = 0;
-	public float maxArmor = 0;
-	public float hull = 0;
-	public float maxHull = 0;
-	public float crew = 0;
-	public float maxCrew = 0;
-	public float turnRate = 0;
-	public float mass = 0;
-	public float energy = 0;
-	public float buildtime = 0;
-	public int player;
-	public GameObject selectionIndicator;
 	public bool targetable = true;
-	public Unit target;
+	public string unitName;
+	public float shield, maxShield, armor, maxArmor, hull, maxHull, crew, maxCrew, turnRate, mass, energy, buildtime;
+	public int player;
+	public GameObject selectionIndicator, iconCam;
 	public Turret mainGun;
 	public List<string> categories;
 	public Texture icon;
 
+	[System.NonSerialized]
 	public Queue<Marker> markers = new Queue<Marker>();
-
+	[System.NonSerialized]
+	public bool isBeingbuilt, selected, builder;
+	[System.NonSerialized]
+	public Unit target;
+	[System.NonSerialized]
 	public Marker currentMarker;
+	[System.NonSerialized]
+	public Tasks task;
+
+
 
 	void Start()
 	{
@@ -78,6 +72,7 @@ public class Unit : MonoBehaviour
 				currentMarker.numUnits--;
 			}
 		}
+
 		if (markers.Count <= 0)
 		{
 			task = Tasks.Idle;
@@ -98,12 +93,18 @@ public class Unit : MonoBehaviour
 			target = ((MarkerAttack)marker).target;
 			task = Tasks.Attacking;
 		}
+		if (builder && marker is MarkerBuild)
+		{
+			gameObject.GetComponent<BuilderUnit>()
+		}
+
 	}
 
 
 	public virtual void AddMarker(Unit Atarget, Marker marker, bool queue, Tasks task)
 	{
-		if(!queue){
+		if (!queue)
+		{
 			ClearOrders();
 		}
 		markers.Enqueue(marker);
@@ -111,7 +112,7 @@ public class Unit : MonoBehaviour
 		{
 			UpdateMarker(null);
 		}
-		
+
 	}
 
 	public virtual void StopOrder()
@@ -145,7 +146,7 @@ public class Unit : MonoBehaviour
 	public virtual void OnEnemyKill(MarkerAttack marker)
 	{
 		target = null;
-		if(marker == currentMarker)
+		if (marker == currentMarker)
 		{
 			currentMarker = null;
 		}

@@ -26,7 +26,6 @@ public class UIUpdates : MonoBehaviour
 	{
 		if (inControl.selectedUnits.Count > 0)
 		{
-			print(inControl.selectedUnits.Count);
 			if (inControl.selectedUnits[0] != null)
 			{
 
@@ -37,7 +36,6 @@ public class UIUpdates : MonoBehaviour
 					infopanel.blocksRaycasts = false;
 					infopanel.interactable = false;
 				}
-				print("Updating Unit UI");
 				healthBar.UpdateBar(unit.hull, unit.maxHull);
 				shieldBar.UpdateBar(unit.shield, unit.maxShield);
 				armorBar.UpdateBar(unit.armor, unit.maxArmor);

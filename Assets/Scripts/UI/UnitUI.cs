@@ -17,9 +17,12 @@ public class UnitUI : MonoBehaviour
 	}
 	void Update()
 	{
-		hull.UpdateBar(parent.hull, parent.maxHull);
-		shield.UpdateBar(parent.shield, parent.maxShield);
-		armor.UpdateBar(parent.armor, parent.maxArmor);
+		if (parent)
+		{
+			hull.UpdateBar(parent.hull, parent.maxHull);
+			shield.UpdateBar(parent.shield, parent.maxShield);
+			armor.UpdateBar(parent.armor, parent.maxArmor);
+		}
 	}
 	void LateUpdate()
 	{

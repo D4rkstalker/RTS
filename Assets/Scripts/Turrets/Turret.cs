@@ -8,37 +8,33 @@ using Lightbug.LaserMachine;
 public class Turret : MonoBehaviour
 {
 	public bool turretEnabled = true;
-	public float maxRange;
-	public float minRange;
-	public float chargeTime;
-	public float rateOfFire;
-	public float salvoSize = 1;
-	public float salvoFireRate;
-	public float turnRate;
-	public float maxTurnAngle;
-	public float trackRangeMulti = 1;
-	public float damage;
 	public bool mainGun;
+	public float maxRange, minRange, chargeTime, rateOfFire, salvoFireRate, turnRate, maxTurnAngle, damage;
+	public float salvoSize = 1;
+	public float trackRangeMulti = 1;
 	public float firingTolerance = 90;
-	public Unit parentUnit;
+	
 	public Muzzle muzzle;
 	public TurretTypes tType;
 	public WeaponTypes wType;
 	[Header("Kinetic Turret Data")]
 	public bool leadTarget = true;
-	public float projectileVelocity;
+	public float projectileVelocity,firingVariation;
 	public float projectileLifetimeMulti = 1;
-	public float firingVariation;
 	public Projectile projectile;
 	[Header("Laser Turret Data")]
 	public float beamLengthMulti = 1;
 	public float beamDuration;
+
+	[System.NonSerialized]
+	public Unit parentUnit;
 
 	protected Unit targetUnit;
 	protected bool firing = false;
 
 	void Start()
 	{
+		parentUnit = transform.parent.gameObject.GetComponent<Unit>();
 		targetUnit = null;
 		if(wType == WeaponTypes.Beam)
 		{
@@ -49,7 +45,11 @@ public class Turret : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		CheckFire();
+		if (!parentUnit.isBeingbuilt)
+		{
+			CheckFire();
+		}
+		
 	}
 
 	public void PointToTarget(Unit target)
