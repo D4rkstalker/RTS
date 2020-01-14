@@ -13,10 +13,9 @@ public class BuildController : MonoBehaviour
 	public BuildIcon buildIcon;
 
 	public List<BuildIcon> activeBuildIcons;
-	public void PopulateBuildableList(List<FactoryUnit> factories)
+	public void PopulateBuildableList(List<BuilderUnit> factories)
 	{
 		buildable = gameObject.transform.parent.GetComponent<UnitList>().GetBuildables(factories);
-
 		foreach (Unit buildableUnit in buildable)
 		{
 			BuildIcon icon = Instantiate(buildIcon, transform.position, transform.rotation) as BuildIcon;

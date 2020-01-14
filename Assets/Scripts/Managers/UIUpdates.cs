@@ -12,17 +12,45 @@ public class UIUpdates : MonoBehaviour
 	public CanvasGroup infopanel;
 	public CanvasGroup buildpanel;
 	public Text namePanel;
+	public Text EText;
+	public Text MText;
+	public Text unitCapDisp;
 
+
+	private ResourceManager rm;
 	private Unit unit;
 
 	// Start is called before the first frame update
 	void Start()
 	{
-
+		rm = gameObject.GetComponent<ResourceManager>();
 	}
 
 	// Update is called once per frame
-	void Update()
+	void LateUpdate()
+	{
+		if (gameObject.GetComponent<Player>().playerID == transform.parent.GetComponent<GameManager>().activePlayer)
+		{
+			UIUpdate();
+		}
+	}
+
+	public void UIUpdate()
+	{
+		UpdateUnitInfoCard();
+		UpdateResourceDisplay();
+
+
+	}
+
+	public void UpdateResourceDisplay()
+	{
+		EText.text = "" + (int)rm.energy;
+		MText.text = "" + (int)rm.mass;
+
+	}
+
+	public void UpdateUnitInfoCard()
 	{
 		if (inControl.selectedUnits.Count > 0)
 		{
@@ -53,5 +81,6 @@ public class UIUpdates : MonoBehaviour
 			infopanel.interactable = false;
 			unit = null;
 		}
+
 	}
 }

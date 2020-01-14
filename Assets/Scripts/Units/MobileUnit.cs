@@ -18,22 +18,18 @@ namespace Assets.Scripts
 		// Start is called before the first frame update
 		public override void OnCreate()
 		{
-			base.OnCreate();
 			agent = GetComponent<NavMeshAgent>();
-			agent.angularSpeed = turnRate * 50;
+			agent.angularSpeed = turnRate * 10;
+			base.OnCreate();
 		}
-        // Update is called once per frame
-		public override void UpdateUnit()
-		{
-			base.UpdateUnit();
-			if (!isBeingbuilt)
-			{
-				if (target != null && (task == Tasks.Attacking || task == Tasks.Idle))
-				{
-					AttackUpdate();
-				}
 
+		public override void UpdateMarker(Marker marker)
+		{
+			if (marker is MarkerMove)
+			{
+				StopUnitAgent();
 			}
+			base.UpdateMarker(marker);
 		}
 
 		public override void CheckMarker(Marker marker)
@@ -51,9 +47,9 @@ namespace Assets.Scripts
 			}
 		}
 
-		public void AttackUpdate()
+		public override void AttackUpdate()
 		{
-
+			base.AttackUpdate();
 			if (Vector3.Distance(target.transform.position, transform.position) > mainGun.maxRange)
 			{
 				agent.isStopped = false;
@@ -61,14 +57,39 @@ namespace Assets.Scripts
 			}
 			else
 			{
-				agent.isStopped = true;
+				StopUnitAgent();
+			}
+		}
+
+		public override void AssistUpdate()
+		{
+			base.AssistUpdate();
+			if(builderType == BuilderTypes.none || assistTarget.isBuilt)
+			{
+				agent.destination = assistTarget.transform.position;
+			}
+			else if (builderType == BuilderTypes.engineer)
+			{
+				builder.AssistBuild(assistTarget);
 			}
 		}
 
 		public override void StopOrder()
 		{
 			base.StopOrder();
+			StopUnitAgent();
+		}
+
+		public virtual void StopUnitAgent()
+		{
 			agent.isStopped = true;
+			agent.ResetPath();
+		}
+
+		public override void ToggleActive(bool toggle)
+		{
+			base.ToggleActive(toggle);
+			agent.enabled = toggle;
 		}
 	}
 }

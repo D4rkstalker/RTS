@@ -7,37 +7,32 @@ public class BuilderUnit : MonoBehaviour
 {
 	public Buildpoint buildPoint;
 	public float buildPower;
-	public List<string> buildableCategories;
+	public List<Categories> buildableCategories;
 	public int player;
 
 	[System.NonSerialized]
 	public ResourceManager resourceManager;
-	[System.NonSerialized]
-	public List<Unit> buildQueue = new List<Unit>();
-	[System.NonSerialized]
+	//[System.NonSerialized]
+	//[SerializeField]
+	public LinkedList<Unit> buildQueue = new LinkedList<Unit>();
+	//[System.NonSerialized]
 	public Unit currentUnit;
-	[System.NonSerialized]
-	public float currentBuild;
-	[System.NonSerialized]
-	public bool paused, repeat, building;
+	//[System.NonSerialized]
+	public bool paused, repeat;
 
-	private float eCost;
-	private float mCost;
+	protected float eCost;
+	protected float mCost;
 
-	void Start()
-	{
-		OnCreate();
+
+	public virtual void AssistBuild(Unit unit) {
+		currentUnit = unit;
 	}
 
-	void Update()
-	{
-		UpdateUnit();
-	}
 
 	public virtual void OnCreate()
 	{
 		player = gameObject.GetComponent<Unit>().player;
-		GameObject[] results = GameObject.FindGameObjectsWithTag("GameManagers");
+		GameObject[] results = GameObject.FindGameObjectsWithTag("PlayerManager");
 		foreach (GameObject result in results)
 		{
 			if (result.GetComponent<Player>().playerID == player)
@@ -49,40 +44,54 @@ public class BuilderUnit : MonoBehaviour
 
 	public virtual void UpdateUnit()
 	{
-		if (!building && currentUnit)
+		if (!currentUnit && buildQueue.Count > 0)
 		{
 			OnStartBuild();
 		}
-		if (!currentUnit && buildQueue.Count > 0)
+	}
+
+	IEnumerator UpdateBuilderLoop()
+	{
+		while (true)
 		{
-			currentUnit = buildQueue[0];
+			UpdateUnit();
+			yield return new WaitForSeconds(GlobalSettings.GameSpeed);
 		}
 	}
 
 	public virtual void AddToQueue(Unit unit)
 	{
-		buildQueue.Add(unit);
+		buildQueue.AddLast(unit);
+		print(buildQueue.Count);
 	}
 
-	public virtual void OnStartBuild()
+	public virtual void OnStartBuild(bool assisting = false)
 	{
-		building = true;
-		eCost = -(currentUnit.energy * buildPower / currentUnit.buildtime);
-		mCost = -(currentUnit.mass * buildPower / currentUnit.buildtime);
-		StartCoroutine(BuildTick());
+		if (CreateUnit(buildQueue.First.Value))
+		{
+			eCost = -(currentUnit.energy * buildPower / currentUnit.buildtime);
+			mCost = -(currentUnit.mass * buildPower / currentUnit.buildtime);
+			StartCoroutine(BuildTick());
+		}
+		else
+		{
+			buildQueue.RemoveFirst();
+			currentUnit = null;
+		}
 	}
 
 	public virtual IEnumerator BuildTick()
 	{
 		while (currentUnit)
 		{
+			//print(currentUnit.buildProgress);
 			if (resourceManager.CheckAmount(eCost, mCost) && !paused)
 			{
-				currentBuild += buildPower;
+				currentUnit.buildProgress += buildPower;
 			}
-			if (currentBuild >= currentUnit.buildtime)
+			if (currentUnit.buildProgress >= currentUnit.buildtime)
 			{
-				OnUnitBuilt();
+				OnUnitBuilt(currentUnit);
 				break;
 			}
 			yield return new WaitForSeconds(0.1f);
@@ -91,24 +100,55 @@ public class BuilderUnit : MonoBehaviour
 		yield return new WaitForSeconds(0.1f);
 	}
 
-	public virtual void OnUnitBuilt()
+	public virtual void OnUnitBuilt(Unit unitbuilt)
 	{
-		building = false;
-		currentBuild = 0;
-		buildQueue.RemoveAt(0);
-		CreateUnit(currentUnit);
 		if (repeat)
 		{
-			buildQueue.Add(currentUnit);
+			buildQueue.AddFirst(buildQueue.First.Value);
+			
 		}
+		buildQueue.RemoveFirst();
 		currentUnit = null;
 	}
 
-	public virtual void CreateUnit(Unit unitToSpawn)
+	public virtual bool CreateUnit(Unit unitToSpawn)
 	{
-		Unit unit = Instantiate(unitToSpawn, buildPoint.transform.position, transform.rotation) as Unit;
-		unit.player = player;
-		unit.OnCreate();
+		if (!CanPlaceUnit(unitToSpawn))
+		{
+			return false;
+		}
+		currentUnit = Instantiate(unitToSpawn, buildPoint.transform.position, transform.rotation) as Unit;
+		currentUnit.player = player;
+		currentUnit.buildProgress = 0;
+		currentUnit.OnCreate();
+		return true;
 	}
+
+	public virtual void StopBuild()
+	{
+		buildQueue.Clear();
+		currentUnit = null;
+	}
+
+	public virtual bool CanPlaceUnit(Unit thingToBuild)
+	{
+		Collider[] hitColliders = Physics.OverlapBox(transform.position, thingToBuild.transform.localScale / 2, Quaternion.identity, LayerMask.GetMask("Units"));
+		foreach (Collider collider in hitColliders)
+		{
+			if (collider.gameObject.GetComponent<StructureUnit>())
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public void Start()
+	{
+		StartCoroutine(UpdateBuilderLoop());
+		OnCreate();
+	}
+
+
 
 }

@@ -8,15 +8,25 @@ public class BuildIcon : MonoBehaviour
 {
 	public Texture buildIcon;
 	public Unit unit;
-	public List<FactoryUnit> builders;
+	public List<BuilderUnit> builders;
+	public MarkerBuild markerBuild;
 
 	public void IssueBuildOrder()
 	{
-		
-		foreach(FactoryUnit factory in builders)
+
+		foreach (BuilderUnit constructor in builders)
 		{
-			print("Building");
-			factory.AddToQueue(unit);
+			if(constructor is FactoryUnit)
+			{
+				constructor.AddToQueue(unit);
+
+			}
+			else if (constructor is ConstructionUnit)
+			{
+				MarkerBuild marker = Instantiate(markerBuild, transform.position, transform.rotation) as MarkerBuild;
+				marker.unitToBuild = unit;
+				marker.builders = builders;
+			}
 		}
 	}
 

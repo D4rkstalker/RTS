@@ -1,7 +1,5 @@
 ﻿using Assets.Scripts;
-using Assets.Scripts.Utilities;
-using System.Collections;
-using System.Collections.Generic;
+using Assets.Scripts.ScriptingUtilities;
 using UnityEngine;
 
 public class Missile : Projectile
@@ -20,7 +18,7 @@ public class Missile : Projectile
 	public void PointToTarget(Unit target)
 	{
 		Vector3 interceptPoint = target.transform.position;
-		interceptPoint = Utilities.FirstOrderIntercept(
+		interceptPoint = ScriptingUtilities.FirstOrderIntercept(
 			transform.position,
 			gameObject.GetComponent<Rigidbody>() ? gameObject.GetComponent<Rigidbody>().velocity : Vector3.zero,
 			velocity,

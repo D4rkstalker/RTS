@@ -87,7 +87,8 @@ MonoBehaviour:
   buildIcon: {fileID: 0}
   unit: {fileID: 0}
   builders: []
-  button: {fileID: 0}
+  markerBuild: {fileID: 4062352922603446584, guid: 560e5f9aec4e9414d8d5a5769a59a95c,
+    type: 3}
 --- !u!114 &7141026786003443152
 MonoBehaviour:
   m_ObjectHideFlags: 0

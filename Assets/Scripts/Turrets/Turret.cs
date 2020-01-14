@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Assets.Scripts.Utilities;
+using Assets.Scripts.ScriptingUtilities;
 using Assets.Scripts;
 using Lightbug.LaserMachine;
 
@@ -13,13 +13,13 @@ public class Turret : MonoBehaviour
 	public float salvoSize = 1;
 	public float trackRangeMulti = 1;
 	public float firingTolerance = 90;
-	
+
 	public Muzzle muzzle;
 	public TurretTypes tType;
 	public WeaponTypes wType;
 	[Header("Kinetic Turret Data")]
 	public bool leadTarget = true;
-	public float projectileVelocity,firingVariation;
+	public float projectileVelocity, firingVariation;
 	public float projectileLifetimeMulti = 1;
 	public Projectile projectile;
 	[Header("Laser Turret Data")]
@@ -29,56 +29,18 @@ public class Turret : MonoBehaviour
 	[System.NonSerialized]
 	public Unit parentUnit;
 
-	protected Unit targetUnit;
-	protected bool firing = false;
+	public Unit targetUnit;
+	public bool firing = false;
 
 	void Start()
 	{
 		parentUnit = transform.parent.gameObject.GetComponent<Unit>();
 		targetUnit = null;
-		if(wType == WeaponTypes.Beam)
+		if (wType == WeaponTypes.Beam)
 		{
 			gameObject.GetComponent<LaserMachine>().SetupLaser(maxRange * beamLengthMulti);
 		}
-	}
-
-	// Update is called once per frame
-	void Update()
-	{
-		if (!parentUnit.isBeingbuilt)
-		{
-			CheckFire();
-		}
-		
-	}
-
-	public void PointToTarget(Unit target)
-	{
-		Vector3 interceptPoint = target.transform.position;
-		if (leadTarget)
-		{
-			interceptPoint = Utilities.FirstOrderIntercept(
-				transform.position,
-				gameObject.GetComponent<MobileUnit>() ? gameObject.GetComponent<MobileUnit>().agent.velocity : Vector3.zero,
-				projectileVelocity,
-				target.transform.position,
-				target.GetComponent<MobileUnit>() ? target.GetComponent<MobileUnit>().agent.velocity : Vector3.zero
-			);
-
-		}
-		if (mainGun && tType == TurretTypes.Spinal)
-		{
-			parentUnit.PointToTarget(interceptPoint);
-		}
-		else
-		{
-			Vector3 _direction = (interceptPoint - transform.position).normalized;
-
-			Quaternion _lookRotation = Quaternion.LookRotation(_direction);
-
-			transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * turnRate);
-
-		}
+		StartCoroutine(TurretUpdateLoop());
 	}
 
 	public virtual void CheckFire()
@@ -93,18 +55,19 @@ public class Turret : MonoBehaviour
 		}
 		else
 		{
-
-			if (Vector3.Distance(targetUnit.transform.position, transform.position) < maxRange * trackRangeMulti)
-			{
-
-				PointToTarget(targetUnit);
-
-			}
 			if (!firing && Vector3.Distance(targetUnit.transform.position, transform.position) < maxRange && Vector3.Distance(targetUnit.transform.position, transform.position) > minRange)
 			{
-
 				firing = true;
+
 				StartCoroutine(InitFiringSequence());
+			}
+			if (Vector3.Distance(targetUnit.transform.position, transform.position) < maxRange * trackRangeMulti)
+			{
+				PointToTarget(targetUnit);
+			}
+			else
+			{
+				OnLostTarget();
 			}
 
 		}
@@ -115,10 +78,10 @@ public class Turret : MonoBehaviour
 	{
 		while (targetUnit != null && Vector3.Distance(targetUnit.transform.position, transform.position) < maxRange && Vector3.Distance(targetUnit.transform.position, transform.position) > minRange)
 		{
-			float angle = Vector3.Angle(transform.forward, targetUnit.transform.position - transform.position );
-			if(angle < firingTolerance)
+			float angle = Vector3.Angle(transform.forward, targetUnit.transform.position - transform.position);
+			if (angle < firingTolerance)
 			{
-				
+
 				for (int i = 0; i < salvoSize; i++)
 				{
 					Invoke("Fire", chargeTime);
@@ -126,7 +89,7 @@ public class Turret : MonoBehaviour
 				}
 				yield return new WaitForSeconds(rateOfFire + beamDuration);
 			}
-			yield return null;
+			yield return new WaitForSeconds(GlobalSettings.GameSpeed);
 		}
 		firing = false;
 		targetUnit = null;
@@ -134,7 +97,7 @@ public class Turret : MonoBehaviour
 
 	public virtual void Fire()
 	{
-		if(wType == WeaponTypes.Kinetic)
+		if (wType == WeaponTypes.Kinetic)
 		{
 			Projectile bullet = Instantiate(projectile, muzzle.transform.position, transform.rotation) as Projectile;
 			bullet.damage = damage;
@@ -148,16 +111,31 @@ public class Turret : MonoBehaviour
 			bullet.GetComponent<Rigidbody>().AddForce(bullet.transform.forward * projectileVelocity, ForceMode.VelocityChange);
 
 		}
-		else if(wType == WeaponTypes.Beam)
+		else if (wType == WeaponTypes.Beam)
 		{
-			StartCoroutine(gameObject.GetComponent<LaserMachine>().Fire(beamDuration,damage,parentUnit.player,maxRange * beamLengthMulti));
+			StartCoroutine(gameObject.GetComponent<LaserMachine>().Fire(beamDuration, damage, parentUnit.player, maxRange * beamLengthMulti));
 		}
 	}
 
+	public virtual void OnLostTarget()
+	{
+		targetUnit = null;
+	}
+	public IEnumerator TurretUpdateLoop()
+	{
+		while (true)
+		{
+			if (parentUnit.isBuilt)
+			{
+				CheckFire();
+			}
+			yield return new WaitForSeconds(GlobalSettings.GameSpeed);
+		}
+	}
 
 	private List<Unit> GetTargets()
 	{
-		Collider[] hitColliders = Physics.OverlapSphere(transform.position, maxRange);
+		Collider[] hitColliders = Physics.OverlapSphere(transform.position, maxRange * trackRangeMulti);
 		if (hitColliders.Length > 0)
 		{
 			return CheckTargets(hitColliders);
@@ -202,5 +180,32 @@ public class Turret : MonoBehaviour
 
 	}
 
+	public void PointToTarget(Unit target)
+	{
+		Vector3 interceptPoint = target.transform.position;
+		if (leadTarget)
+		{
+			interceptPoint = ScriptingUtilities.FirstOrderIntercept(
+				transform.position,
+				gameObject.GetComponent<MobileUnit>() ? gameObject.GetComponent<MobileUnit>().agent.velocity : Vector3.zero,
+				projectileVelocity,
+				target.transform.position,
+				target.GetComponent<MobileUnit>() ? target.GetComponent<MobileUnit>().agent.velocity : Vector3.zero
+			);
 
+		}
+		if (mainGun && tType == TurretTypes.Spinal)
+		{
+			parentUnit.PointToTarget(interceptPoint);
+		}
+		else
+		{
+			Vector3 _direction = (interceptPoint - transform.position).normalized;
+
+			Quaternion _lookRotation = Quaternion.LookRotation(_direction);
+
+			transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * turnRate);
+
+		}
+	}
 }

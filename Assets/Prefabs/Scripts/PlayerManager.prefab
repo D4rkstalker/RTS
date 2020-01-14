@@ -76,7 +76,10 @@ MonoBehaviour:
     type: 3}
   attackMarker: {fileID: 8065883741549038301, guid: ab1fbbea46faa374fa3cca919af6629e,
     type: 3}
-  assistMarker: {fileID: 0}
+  assistMarker: {fileID: 8244343458053752356, guid: 5de1a60ce4db4e84885d1a377e4777b7,
+    type: 3}
+  buildMarker: {fileID: 4062352922603446584, guid: 560e5f9aec4e9414d8d5a5769a59a95c,
+    type: 3}
 --- !u!114 &162962796439553795
 MonoBehaviour:
   m_ObjectHideFlags: 0

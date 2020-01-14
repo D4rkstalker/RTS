@@ -12,8 +12,9 @@ public class UnitUI : MonoBehaviour
 	public Unit parent;
 	void Awake()
 	{
-		parent = transform.parent.gameObject.GetComponent<Unit>();
-		rotation = transform.rotation;
+		parent = transform.parent.parent.gameObject.GetComponent<Unit>();
+		rotation = new Quaternion();
+		rotation.eulerAngles = new Vector3(90, 0, 0);
 	}
 	void Update()
 	{

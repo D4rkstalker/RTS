@@ -17,9 +17,11 @@ public class InputController : MonoBehaviour
 	public MarkerMove moveMarker;
 	public MarkerAttack attackMarker;
 	public MarkerAssist assistMarker;
+	public MarkerBuild buildMarker;
 
 	private Rect selectionBoxUI;
 	private BuildController buildController;
+	private MarkerBuild currentMarker;
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -91,21 +93,20 @@ public class InputController : MonoBehaviour
 		{
 			Deselect();
 		}
-		List<FactoryUnit> factories = new List<FactoryUnit>();
+		List<BuilderUnit> constructors = new List<BuilderUnit>();
 		foreach (Collider selected in selections)
 		{
 			Unit selectedUnit = selected.gameObject.GetComponent<Unit>();
-			selectedUnit.selected = true;
-			selectedUnit.selectionIndicator.SetActive(true);
-			selectedUnits.Add(selectedUnit);
-			if (selectedUnit is FactoryUnit)
+			if (selectedUnit.selectable)
 			{
-				factories.Add(selectedUnit.GetComponent<FactoryUnit>());
+				if (SelectUnit(selectedUnit)){
+					constructors.Add(selectedUnit.GetComponent<BuilderUnit>());
+				}
 			}
 		}
-		if (factories.Count > 0)
+		if (constructors.Count > 0 )
 		{
-			buildController.PopulateBuildableList(factories);
+			buildController.PopulateBuildableList(constructors);
 		}
 	}
 
@@ -128,7 +129,7 @@ public class InputController : MonoBehaviour
 							marker.numUnits++;
 							unit.GetComponent<MobileUnit>().AddMarker(null, marker, Input.GetButton("Shift"), Tasks.Moving);
 						}
-						else if (unit is FactoryUnit)
+						else if (unit.builderType == BuilderTypes.factory)
 						{
 							unit.GetComponent<FactoryUnit>().SetRallyPoint(marker.transform.position);
 						}
@@ -153,6 +154,7 @@ public class InputController : MonoBehaviour
 					{
 						MarkerAssist marker = Instantiate(assistMarker, hit.point, transform.rotation) as MarkerAssist;
 						marker.numUnits = selectedUnits.Count;
+						marker.target = target;
 						foreach (Unit unit in selectedUnits)
 						{
 							unit.GetComponent<MobileUnit>().AddMarker(target, marker, Input.GetButton("Shift"), Tasks.Assisting);
@@ -169,7 +171,6 @@ public class InputController : MonoBehaviour
 
 	public void LeftClick()
 	{
-
 		Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit, 100))
@@ -180,7 +181,7 @@ public class InputController : MonoBehaviour
 			}
 			else if (hit.collider.tag == "Units")
 			{
-				Select(hit.collider.gameObject);
+				SelectUnit(hit.collider.gameObject.GetComponent<Unit>());
 			}
 		}
 	}
@@ -196,6 +197,7 @@ public class InputController : MonoBehaviour
 				{
 					unit.selected = false;
 					unit.selectionIndicator.SetActive(false);
+					unit.iconCam.SetActive(false);
 				}
 			}
 			selectedUnits.Clear();
@@ -203,21 +205,18 @@ public class InputController : MonoBehaviour
 		buildController.ClearBuildIcons();
 	}
 
-	public void Select(GameObject selectedObject)
+	public bool SelectUnit(Unit selectedUnit)
 	{
-		Unit unit = selectedObject.GetComponent<Unit>();
-		unit.selected = true;
-		if (Input.GetButton("Shift"))
+		selectedUnit.selected = true;
+		selectedUnit.selectionIndicator.SetActive(true);
+		selectedUnit.iconCam.SetActive(true);
+		selectedUnits.Add(selectedUnit);
+		if (selectedUnit.builderType != BuilderTypes.none)
 		{
-			unit.selectionIndicator.SetActive(true);
-			selectedUnits.Add(unit);
+			return true;
 		}
-		else
-		{
-			Deselect();
-			unit.selectionIndicator.SetActive(true);
-			selectedUnits.Add(unit);
-		}
+		return false;
+		
 	}
 
 	private void OnGUI()

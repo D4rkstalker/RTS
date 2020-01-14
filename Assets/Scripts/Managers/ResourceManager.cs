@@ -15,23 +15,7 @@ public class ResourceManager : MonoBehaviour
 	public float currentUnits;
 	public float unitCap;
 
-	public Text EText;
-	public Text MText;
-	public Text unitCapDisp;
-
     // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-		EText.text = ""+(int)energy;
-		MText.text = "" + (int)mass;
-		//unitCapDisp.text = "/" + currentUnits + "/" + unitCap;
-	}
 
 	public void UpdateEnergy(float energyIn)
 	{

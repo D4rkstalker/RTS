@@ -1,15 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Assets.Scripts;
 
 public class Marker : MonoBehaviour
 {
 	public int numUnits = 1;
 
-	void Update()
+	public virtual void OnCreateMarker()
 	{
-		UpdateMarker();
-		
+		StartCoroutine(UpdateLoop());
+	}
+
+	public IEnumerator UpdateLoop()
+	{
+		while (true)
+		{
+			UpdateMarker();
+			yield return null;//new WaitForSeconds(GlobalSettings.GameSpeed);
+
+		}
 	}
 	public virtual void UpdateMarker()
 	{
@@ -18,4 +28,10 @@ public class Marker : MonoBehaviour
 			Destroy(gameObject);
 		}
 	}
+
+	public void Start()
+	{
+		OnCreateMarker();
+	}
+
 }

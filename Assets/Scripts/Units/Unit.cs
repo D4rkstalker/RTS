@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Scripts;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -12,37 +13,103 @@ public class Unit : MonoBehaviour
 	public int player;
 	public GameObject selectionIndicator, iconCam;
 	public Turret mainGun;
-	public List<string> categories;
-	public Texture icon;
-
+	public List<Categories> categories;
+	public Texture2D icon;
+	
 	[System.NonSerialized]
-	public Queue<Marker> markers = new Queue<Marker>();
+	public LinkedList<Marker> markers = new LinkedList<Marker>();
 	[System.NonSerialized]
-	public bool isBeingbuilt, selected, builder;
+	public bool isBuilt, selected, selectable, isResourceCreator;
 	[System.NonSerialized]
 	public Unit target;
+	[System.NonSerialized]
+	public Unit assistTarget;
 	[System.NonSerialized]
 	public Marker currentMarker;
 	[System.NonSerialized]
 	public Tasks task;
+	[System.NonSerialized]
+	public BuilderTypes builderType = BuilderTypes.none;
+	[System.NonSerialized]
+	public ResourceCreator rc;
+	[System.NonSerialized]
+	public BuilderUnit builder;
+	//[System.NonSerialized]
+	public float buildProgress = 0f;
 
-
-
-	void Start()
+	void Awake()
 	{
 		OnCreate();
-
 	}
 
-	void Update()
+	public IEnumerator CompletionCheck()
 	{
-		UpdateUnit();
+		do
+		{
+			if (buildProgress >= buildtime)
+			{
+				OnBuilt();
+			}
+			yield return new WaitForSeconds(GlobalSettings.GameSpeed);
+		} 
+		while (!isBuilt);
+		yield return null;
 	}
 
 	public virtual void OnCreate()
 	{
+		selectable = false;
 		selectionIndicator.SetActive(false);
+		//Setup builder units
+		if (gameObject.GetComponent<FactoryUnit>())
+		{
+			builder = gameObject.GetComponent<FactoryUnit>();
+			builderType = BuilderTypes.factory;
+		}
+		else if (gameObject.GetComponent<ConstructionUnit>())
+		{
+			builder = gameObject.GetComponent<ConstructionUnit>();
+			builderType = BuilderTypes.engineer;
+		}
+
+		//Setup resource producers
+		if (gameObject.GetComponent<ResourceCreator>())
+		{
+			rc = gameObject.GetComponent<ResourceCreator>();
+			isResourceCreator = true;
+		}
+
+		GenIcon();
+		ToggleActive(false);
+		StartCoroutine(CompletionCheck());
 	}
+
+	public virtual void OnBuilt()
+	{
+		isBuilt = true;
+		selectable = true;
+		ToggleActive(true);
+		StartCoroutine(UpdateUnitLoop());
+	}
+
+	public virtual void UpdateUnit()
+	{
+		if (hull <= 0)
+		{
+			OnKill();
+		}
+
+		if (target != null && (task == Tasks.Attacking || task == Tasks.Idle))
+		{
+			AttackUpdate();
+		}
+		else if (assistTarget != null && task == Tasks.Assisting)
+		{
+			AssistUpdate();
+		}
+	}
+
+
 	public virtual void OnDamage(float[] damages)
 	{
 		shield -= damages[0];
@@ -55,34 +122,28 @@ public class Unit : MonoBehaviour
 		crew = Mathf.Clamp(crew, 0.0f, maxCrew);
 	}
 
-	public virtual void UpdateUnit()
-	{
-		if (hull <= 0)
-		{
-			OnKill();
-		}
-		iconCam.SetActive(selected);
-	}
 	public virtual void UpdateMarker(Marker marker)
 	{
 		if (marker)
 		{
-			if (marker == currentMarker)
+			marker.numUnits--;
+			markers.Remove(marker);
+		}
+		if (marker == currentMarker || !marker)
+		{
+			if (markers.Count <= 0)
 			{
-				currentMarker.numUnits--;
+				task = Tasks.Idle;
+
+				currentMarker = null;
+
 			}
-		}
-
-		if (markers.Count <= 0)
-		{
-			task = Tasks.Idle;
-			currentMarker = null;
-
-		}
-		else
-		{
-			currentMarker = markers.Dequeue();
-			CheckMarker(currentMarker);
+			else
+			{
+				currentMarker = markers.First.Value;
+				markers.RemoveFirst();
+				CheckMarker(currentMarker);
+			}
 		}
 	}
 
@@ -93,13 +154,20 @@ public class Unit : MonoBehaviour
 			target = ((MarkerAttack)marker).target;
 			task = Tasks.Attacking;
 		}
-		if (builder && marker is MarkerBuild)
+		else if (builderType == BuilderTypes.engineer && marker is MarkerBuild)
 		{
-			gameObject.GetComponent<BuilderUnit>()
+			Unit buildThis = marker.GetComponent<MarkerBuild>().unitToBuild;
+			buildThis.transform.position = marker.transform.position;
+			builder.AddToQueue(buildThis);
+			task = Tasks.Building;
+		}
+		else if(marker is MarkerAssist)
+		{
+			assistTarget = marker.GetComponent<MarkerAssist>().target;
+			task = Tasks.Assisting;
 		}
 
 	}
-
 
 	public virtual void AddMarker(Unit Atarget, Marker marker, bool queue, Tasks task)
 	{
@@ -107,7 +175,7 @@ public class Unit : MonoBehaviour
 		{
 			ClearOrders();
 		}
-		markers.Enqueue(marker);
+		markers.AddLast(marker);
 		if (!currentMarker)
 		{
 			UpdateMarker(null);
@@ -140,7 +208,15 @@ public class Unit : MonoBehaviour
 			}
 			markers.Clear();
 		}
-
+		if (builder)
+		{
+			builder.StopBuild();
+		}
+		if (gameObject.GetComponent<MobileUnit>())
+		{
+			gameObject.GetComponent<MobileUnit>().agent.isStopped = false;
+		}
+		target = null;
 	}
 
 	public virtual void OnEnemyKill(MarkerAttack marker)
@@ -156,6 +232,7 @@ public class Unit : MonoBehaviour
 	public virtual void OnKill()
 	{
 		ClearOrders();
+		StopAllCoroutines();
 		Destroy(gameObject);
 	}
 	public void PointToTarget(Vector3 target)
@@ -168,6 +245,48 @@ public class Unit : MonoBehaviour
 
 			transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * turnRate);
 
+		}
+	}
+
+	public virtual void AttackUpdate()
+	{
+
+	}
+	public virtual void AssistUpdate()
+	{
+
+	}
+
+	public virtual void ToggleActive(bool toggle)
+	{
+		if (builder)
+		{
+			builder.enabled = toggle;
+		}
+		if (rc)
+		{
+			rc.enabled = toggle;
+		}
+	}
+
+	public IEnumerator UpdateUnitLoop()
+	{
+		while (true)
+		{
+			UpdateUnit();
+			yield return new WaitForSeconds(GlobalSettings.GameSpeed);
+		}
+	}
+
+	public virtual void GenIcon()
+	{
+		IconManager im;
+		GameObject[] results = GameObject.FindGameObjectsWithTag("GameManager");
+		foreach (GameObject result in results)
+		{
+			im = result.GetComponent<IconManager>();
+			icon = im.GenerateIcons(categories);
+			return;
 		}
 	}
 

@@ -7,35 +7,35 @@ public class UnitList : MonoBehaviour
 {
 	public List<Unit> units;
 
-	public List<Unit> GetBuildables(List<FactoryUnit> factories)
+	public List<Unit> GetBuildables(List<BuilderUnit> factories)
 	{
 		bool buildable = false;
 		List<Unit> buildableUnits = new List<Unit>();
 		foreach (Unit unit in units)
 		{
-			foreach (FactoryUnit factory in factories)
+			if (unit.categories != null)
 			{
-
-				foreach (string category in factory.buildableCategories)
+				foreach (BuilderUnit factory in factories)
 				{
-
-					//print(unit.categories[0]);
-					if (unit.categories.Contains(category))
+					foreach (Categories category in factory.buildableCategories)
 					{
-						buildable = true;
-						//print(category);
-					}
-					else
-					{
-						buildable = false;
-						break;
+						if (unit.categories.Contains(category))
+						{
+							buildable = true;
+							//print(category);
+						}
+						else
+						{
+							buildable = false;
+							break;
+						}
 					}
 				}
-			}
-			if (buildable)
-			{
-				buildableUnits.Add(unit);
-				buildable = false;
+				if (buildable)
+				{
+					buildableUnits.Add(unit);
+					buildable = false;
+				}
 			}
 		}
 		return buildableUnits;

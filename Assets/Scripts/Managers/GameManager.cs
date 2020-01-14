@@ -14,10 +14,9 @@ public class GameManager : MonoBehaviour
 			child.gameObject.GetComponent<InputController>().enabled = false;
 			child.gameObject.GetComponent<UIUpdates>().enabled = false;
 		}
+		UpdatePlayer();
 	}
-
-	// Update is called once per frame
-	void Update()
+	void UpdatePlayer()
     {
 		foreach(GameObject player in playerControllers)
 		{
@@ -25,6 +24,11 @@ public class GameManager : MonoBehaviour
 			{
 				player.GetComponent<InputController>().enabled = true;
 				player.GetComponent<UIUpdates>().enabled = true;
+			}
+			else
+			{
+				player.GetComponent<InputController>().enabled = false;
+				player.GetComponent<UIUpdates>().enabled = false;
 			}
 		}
     }
