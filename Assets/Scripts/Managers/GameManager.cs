@@ -6,6 +6,8 @@ public class GameManager : MonoBehaviour
 {
 	public List<GameObject> playerControllers;
 	public int activePlayer;
+	public List<Unit> startingUnits;
+
     void Start()
     {
 		foreach (Transform child in gameObject.transform)

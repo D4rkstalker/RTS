@@ -61,7 +61,7 @@ MonoBehaviour:
   maxHull: 40
   crew: 3
   maxCrew: 3
-  turnRate: 2
+  turnRate: 10
   mass: 50
   energy: 50
   buildtime: 50
@@ -111,7 +111,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 655728445246199066}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 1.33
   m_Speed: 4
   m_Acceleration: 8
   avoidancePriority: 50

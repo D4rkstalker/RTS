@@ -5,16 +5,13 @@ using UnityEngine.UI;
 
 public class UIUpdates : MonoBehaviour
 {
-	public InputController inControl;
-	public SimpleHealthBar healthBar;
-	public SimpleHealthBar shieldBar;
-	public SimpleHealthBar armorBar;
+	public SimpleHealthBar healthBar, shieldBar, armorBar;
+	public SimpleHealthBar massBar, energyBar;
 	public CanvasGroup infopanel;
 	public CanvasGroup buildpanel;
 	public Text namePanel;
-	public Text EText;
-	public Text MText;
-	public Text unitCapDisp;
+	public Text currentE, trendE, maxE, currentM, trendM, maxM;
+	public InputController inControl;
 
 
 	private ResourceManager rm;
@@ -45,9 +42,14 @@ public class UIUpdates : MonoBehaviour
 
 	public void UpdateResourceDisplay()
 	{
-		EText.text = "" + (int)rm.energy;
-		MText.text = "" + (int)rm.mass;
-
+		currentE.text = "" + (int)rm.energy;
+		currentM.text = "" + (int)rm.mass;
+		maxE.text = "" + (int)rm.energyCap;
+		maxM.text = "" + (int)rm.massCap;
+		trendE.text = "" + (int)rm.energyTrend;
+		trendM.text = "" + (int)rm.massTrend;
+		massBar.UpdateBar(rm.mass, rm.massCap);
+		energyBar.UpdateBar(rm.energy, rm.energyCap);
 	}
 
 	public void UpdateUnitInfoCard()

@@ -36,7 +36,7 @@ public class ResourceCreator : MonoBehaviour
 		while (true)
 		{
 			UpdateUnit();
-			yield return new WaitForSeconds(GlobalSettings.GameSpeed);
+			yield return new WaitForSeconds(GlobalSettings.GameSpeed * 10);
 		}
 	}
 

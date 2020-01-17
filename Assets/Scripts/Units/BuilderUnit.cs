@@ -117,7 +117,7 @@ public class BuilderUnit : MonoBehaviour
 		{
 			return false;
 		}
-		currentUnit = Instantiate(unitToSpawn, buildPoint.transform.position, transform.rotation) as Unit;
+		currentUnit = Instantiate(unitToSpawn, buildPoint.transform.position, new Quaternion()) as Unit;
 		currentUnit.player = player;
 		currentUnit.buildProgress = 0;
 		currentUnit.OnCreate();

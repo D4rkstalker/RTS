@@ -2,20 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Assets.Scripts.ScriptingUtilities;
 
 public class ResourceManager : MonoBehaviour
 {
 	public enum ResourceTypes {Mass, Energy, ShipCap }
 	public ResourceTypes resourceType;
 
-	public float energy;
-	public float energyCap;
-	public float mass;
-	public float massCap;
+	public float energy, energyCap, energyTrend;
+	public float mass, massCap, massTrend;
 	public float currentUnits;
 	public float unitCap;
 
-    // Start is called before the first frame update
+	private float oldMass, oldEnergy;
+
+	// Start is called before the first frame update
+
+	void Start()
+	{
+		ResourceUpdateLoop();
+	}
 
 	public void UpdateEnergy(float energyIn)
 	{
@@ -52,5 +58,22 @@ public class ResourceManager : MonoBehaviour
 	public void UpdateShipCap(float shipCap)
 	{
 		unitCap += shipCap;
+	}
+
+	IEnumerator ResourceUpdate()
+	{
+		while (true)
+		{
+			energyTrend = energy - oldEnergy;
+			massTrend = mass - oldMass;
+			oldEnergy = energy;
+			oldMass = mass;
+			yield return new WaitForSeconds(GlobalSettings.GameSpeed * 10);
+		}
+	}
+
+	public void ResourceUpdateLoop()
+	{
+		StartCoroutine(ResourceUpdate());
 	}
 }

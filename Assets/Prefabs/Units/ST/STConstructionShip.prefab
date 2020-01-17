@@ -113,7 +113,7 @@ MonoBehaviour:
   selectionIndicator: {fileID: 3010123883328047336}
   iconCam: {fileID: 9091149305382633521}
   mainGun: {fileID: 0}
-  categories: 0200000006000000
+  categories: 02000000030000000900000006000000
   icon: {fileID: 0}
   buildProgress: 0
   priority: 0
@@ -131,13 +131,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   buildPoint: {fileID: 7083786481100529083}
   buildPower: 1
-  buildableCategories: 0500000004000000
+  buildableCategories: 0200000004000000
   player: 0
   currentUnit: {fileID: 0}
   paused: 0
   repeat: 0
   self: {fileID: 0}
-  buildRange: 1
+  buildRange: 10
 --- !u!65 &4403484796790950861
 BoxCollider:
   m_ObjectHideFlags: 0

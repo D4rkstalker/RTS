@@ -14,6 +14,8 @@ public class IconManager : MonoBehaviour
 	public Texture2D iconCapital; //battleship,carrier
 	public Texture2D iconSupercapital; // dreadnaught, titan
 	public Texture2D iconFlagship;
+	public Texture2D iconFactory;
+	public Texture2D iconStructure;
 
 	//Represents unit role
 	public Texture2D roleAssault;
@@ -23,6 +25,9 @@ public class IconManager : MonoBehaviour
 	public Texture2D roleIntel;
 	public Texture2D roleCounterIntel;
 	public Texture2D roleCarrier;
+	public Texture2D rolePowergen;
+	public Texture2D roleMassgen;
+	public Texture2D roleEngineer;
 
 	private Texture2D icon;
 	private Texture2D role;
@@ -56,6 +61,12 @@ public class IconManager : MonoBehaviour
 				case Categories.Flagship:
 					icon = iconFlagship;
 					break;
+				case Categories.Factory:
+					icon = iconFactory;
+					break;
+				case Categories.Building:
+					icon = iconStructure;
+					break;
 
 				//base roles
 				case Categories.Assault:
@@ -79,9 +90,19 @@ public class IconManager : MonoBehaviour
 				case Categories.rCarrier:
 					role = roleCarrier;
 					break;
+				case Categories.MassCreator:
+					role = roleMassgen;
+					break;
+				case Categories.EnergyCreator:
+					role = rolePowergen;
+					break;
+				case Categories.Engineer:
+					role = roleEngineer;
+					break;
 
 				default:
-					icon = iconCorvette;
+					print("Using default icons");
+					icon = iconStructure;
 					role = roleAssault;
 					break;
 			}

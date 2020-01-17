@@ -20,6 +20,7 @@ public class BuildController : MonoBehaviour
 		{
 			BuildIcon icon = Instantiate(buildIcon, transform.position, transform.rotation) as BuildIcon;
 			icon.unit = buildableUnit;
+			buildableUnit.GenIcon();
 			icon.buildIcon = buildableUnit.icon;
 			icon.SetUpIcon();
 			icon.transform.SetParent(buildablePanel.transform,false);
