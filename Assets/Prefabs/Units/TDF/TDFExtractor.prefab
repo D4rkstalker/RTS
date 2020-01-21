@@ -419,6 +419,7 @@ MonoBehaviour:
   categories: 000000000400000007000000
   icon: {fileID: 0}
   buildProgress: 0
+  massExtractor: 1
 --- !u!114 &7340925052623819381
 MonoBehaviour:
   m_ObjectHideFlags: 0

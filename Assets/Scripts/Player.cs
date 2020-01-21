@@ -5,4 +5,5 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
 	public int playerID;
+	public Categories faction;
 }

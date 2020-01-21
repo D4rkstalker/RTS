@@ -7,7 +7,6 @@ public class FactoryUnit : BuilderUnit
 {
 	public GameObject rallypoint;
 	public MarkerMove moveMarker;
-	public Unit self;
 	public override void OnCreate()
 	{
 		base.OnCreate();

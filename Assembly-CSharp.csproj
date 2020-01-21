@@ -90,6 +90,11 @@
     <Compile Include="Assets\Scripts\Defines\DamageTypes.cs" />
     <Compile Include="Assets\Scripts\Defines\Tasks.cs" />
     <Compile Include="Assets\Scripts\Defines\WeaponTypes.cs" />
+    <Compile Include="Assets\Scripts\Managers\AIManagers\AIMain.cs" />
+    <Compile Include="Assets\Scripts\Managers\AIManagers\AIStates.cs" />
+    <Compile Include="Assets\Scripts\Managers\AIManagers\AIUtilities.cs" />
+    <Compile Include="Assets\Scripts\Managers\AIManagers\EconomyManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\AIManagers\UnitsManager.cs" />
     <Compile Include="Assets\Scripts\Managers\BuildController.cs" />
     <Compile Include="Assets\Scripts\Managers\CameraControl.cs" />
     <Compile Include="Assets\Scripts\Managers\GameManager.cs" />
@@ -98,6 +103,7 @@
     <Compile Include="Assets\Scripts\Managers\InputController.cs" />
     <Compile Include="Assets\Scripts\Managers\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\Managers\UIUpdates.cs" />
+    <Compile Include="Assets\Scripts\MassDeposit.cs" />
     <Compile Include="Assets\Scripts\Player.cs" />
     <Compile Include="Assets\Scripts\Projectiles\Kinetic.cs" />
     <Compile Include="Assets\Scripts\Projectiles\LaserMachine.cs" />

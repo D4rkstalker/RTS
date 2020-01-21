@@ -7,7 +7,11 @@ public class MarkerBuild : Marker
 {
 	public Unit unitToBuild;
 	public List<BuilderUnit> builders;
+	public GameObject no;
+
+	private bool canBePlaced = true;
 	private bool placed = false;
+
 
 	public override void OnCreateMarker()
 	{
@@ -17,58 +21,71 @@ public class MarkerBuild : Marker
 	public override void UpdateMarker()
 	{
 		base.UpdateMarker();
-		if (!placed)
+		canBePlaced = Canbuild(placed);
+		if (!canBePlaced)
 		{
-			if (Input.GetButtonDown("Left"))
+			if (!placed)
 			{
-				if (Input.GetButton("Shift"))
-				{
-					GameObject newMarker = Instantiate(gameObject) as GameObject;
-				}
-				placed = true;
-				foreach (ConstructionUnit constructor in builders)
-				{
-					constructor.GetComponent<Unit>().AddMarker(unitToBuild, this, Input.GetButton("Shift"), Tasks.Building);
-				}
-
-			}
-			else if (Input.GetButton("Right"))
-			{
-				Destroy(gameObject);
-			}
-
-			Vector3 mouse = Input.mousePosition;
-			Ray castPoint = Camera.main.ScreenPointToRay(mouse);
-			RaycastHit hit;
-			if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, LayerMask.GetMask("movement")))
-			{
-				transform.position = hit.point;
+				no.SetActive(true);
 			}
 		}
-		else
+		else if (!placed)
 		{
-			Canbuild();
+			no.SetActive(false);
+		}
+		if (placed && !canBePlaced)
+		{
+			foreach (BuilderUnit builder in builders)
+			{
+				builder.GetComponent<MobileUnit>().UpdateMarker(this);
+			}
+			Destroy(gameObject);
+
 		}
 	}
 
-	public void Canbuild()
+	public void PlaceMarker()
 	{
+		placed = true;
+		foreach (ConstructionUnit constructor in builders)
+		{
+			constructor.GetComponent<Unit>().AddMarker(unitToBuild, this, Input.GetButton("Shift"), Tasks.Building);
+		}
+
+	}
+
+	public bool Canbuild(bool placed)
+	{
+		bool canPlace = false;
+		StructureUnit tempStructure = unitToBuild.GetComponent<StructureUnit>();
 		Collider[] hitColliders = Physics.OverlapBox(transform.position, transform.localScale / 2, Quaternion.identity, LayerMask.GetMask("Units"));
 		foreach (Collider collider in hitColliders)
 		{
 			if (collider.gameObject.GetComponent<StructureUnit>())
 			{
-				if (collider.gameObject.GetComponent<StructureUnit>().isBuilt)
-				{
-					foreach (BuilderUnit builder in builders)
-					{
-						builder.GetComponent<MobileUnit>().UpdateMarker(this);
-					}
-					Destroy(gameObject);
-					return;
-				}
+				return false;
 			}
+			else if (tempStructure)
+			{
+				if (collider.gameObject.GetComponent<MassDeposit>())
+				{
+					if (!tempStructure.massExtractor)
+					{
+						return false;
+					}
+					else
+					{
+						canPlace = true;
+					}
+				}				
+			}
+			
 		}
+		if (!tempStructure.massExtractor)
+		{
+			return true;
+		}
+		return canPlace; 
 	}
 
 }

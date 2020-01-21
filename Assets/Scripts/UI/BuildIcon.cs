@@ -11,6 +11,8 @@ public class BuildIcon : MonoBehaviour
 	public List<BuilderUnit> builders;
 	public MarkerBuild markerBuild;
 
+	public InputController ic;
+
 	public void IssueBuildOrder()
 	{
 
@@ -26,6 +28,9 @@ public class BuildIcon : MonoBehaviour
 				MarkerBuild marker = Instantiate(markerBuild, transform.position, transform.rotation) as MarkerBuild;
 				marker.unitToBuild = unit;
 				marker.builders = builders;
+				marker.numUnits = builders.Count;
+				ic.currentMarker = marker;
+				ic.currentMode = CurrentMode.building;
 			}
 		}
 	}

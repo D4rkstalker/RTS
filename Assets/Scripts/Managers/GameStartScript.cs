@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class GameStartScript : MonoBehaviour
 {
-	public StartingPosition startPos;
 
 	public void SpawnStartingUnits()
 	{
@@ -12,7 +11,7 @@ public class GameStartScript : MonoBehaviour
 		List<Unit> startingUnits = gameObject.transform.parent.GetComponent<GameManager>().startingUnits;
 		foreach(Unit unit in startingUnits)
 		{
-			Unit current = Instantiate(unit,startPos.transform) as Unit;
+			Unit current = Instantiate(unit,transform) as Unit;
 			current.player = player;
 			current.buildProgress = current.buildtime;
 		}

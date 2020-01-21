@@ -101,7 +101,6 @@ public class IconManager : MonoBehaviour
 					break;
 
 				default:
-					print("Using default icons");
 					icon = iconStructure;
 					role = roleAssault;
 					break;

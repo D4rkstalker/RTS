@@ -8,7 +8,8 @@ public class BuilderUnit : MonoBehaviour
 	public Buildpoint buildPoint;
 	public float buildPower;
 	public List<Categories> buildableCategories;
-	public int player;
+	public int player; 
+	public Unit self;
 
 	[System.NonSerialized]
 	public ResourceManager resourceManager;
@@ -31,7 +32,8 @@ public class BuilderUnit : MonoBehaviour
 
 	public virtual void OnCreate()
 	{
-		player = gameObject.GetComponent<Unit>().player;
+		self = gameObject.GetComponent<Unit>();
+		player = self.player;
 		GameObject[] results = GameObject.FindGameObjectsWithTag("PlayerManager");
 		foreach (GameObject result in results)
 		{
@@ -62,7 +64,6 @@ public class BuilderUnit : MonoBehaviour
 	public virtual void AddToQueue(Unit unit)
 	{
 		buildQueue.AddLast(unit);
-		print(buildQueue.Count);
 	}
 
 	public virtual void OnStartBuild(bool assisting = false)
@@ -109,6 +110,7 @@ public class BuilderUnit : MonoBehaviour
 		}
 		buildQueue.RemoveFirst();
 		currentUnit = null;
+		self.task = Tasks.Idle;
 	}
 
 	public virtual bool CreateUnit(Unit unitToSpawn)

@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public class ConstructionUnit : BuilderUnit
 {
-	public Unit self;
+	
 	public float buildRange = 1;
 
 	public override void OnStartBuild(bool assisting = false)
@@ -27,7 +27,6 @@ public class ConstructionUnit : BuilderUnit
 	public override void OnCreate()
 	{
 		base.OnCreate();
-		self = gameObject.GetComponent<Unit>();
 		self.builderType = BuilderTypes.engineer;
 	}
 
@@ -79,6 +78,7 @@ public class ConstructionUnit : BuilderUnit
 		{
 			base.OnUnitBuilt(unitbuilt);
 		}
+		self.UpdateMarker(self.currentMarker);
 		self.GetComponent<NavMeshAgent>().isStopped = false;
 		self.GetComponent<NavMeshAgent>().ResetPath();
 	}

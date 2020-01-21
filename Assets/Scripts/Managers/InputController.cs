@@ -18,10 +18,11 @@ public class InputController : MonoBehaviour
 	public MarkerAttack attackMarker;
 	public MarkerAssist assistMarker;
 	public MarkerBuild buildMarker;
+	public Marker currentMarker;
+	public CurrentMode currentMode;
 
 	private Rect selectionBoxUI;
 	private BuildController buildController;
-	private MarkerBuild currentMarker;
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -33,7 +34,28 @@ public class InputController : MonoBehaviour
 	void Update()
 	{
 		selectedUnits.RemoveAll(item => item == null);
+		CheckInputs();
+		CheckCurrentMarker();
 
+	}
+
+	public void CheckCurrentMarker()
+	{
+		if (currentMarker)
+		{
+			Vector3 mouse = Input.mousePosition;
+			Ray castPoint = Camera.main.ScreenPointToRay(mouse);
+			RaycastHit hit;
+			if (Physics.Raycast(castPoint, out hit, 100, LayerMask.GetMask("movement")))
+			{
+				currentMarker.transform.position = hit.point;
+			}
+		}
+
+	}
+
+	public void CheckInputs()
+	{
 		if (!EventSystem.current.IsPointerOverGameObject())
 		{
 			if (Input.GetButton("Right"))
@@ -57,7 +79,10 @@ public class InputController : MonoBehaviour
 
 			if (Input.GetButtonUp("Left"))
 			{
-				MultiSelect(startPos, endPos);
+				if (currentMode != CurrentMode.building)
+				{
+					MultiSelect(startPos, endPos);
+				}
 				startPos = Vector2.zero;
 				endPos = Vector2.zero;
 			}
@@ -97,14 +122,19 @@ public class InputController : MonoBehaviour
 		foreach (Collider selected in selections)
 		{
 			Unit selectedUnit = selected.gameObject.GetComponent<Unit>();
-			if (selectedUnit.selectable)
+			if (selectedUnit)
 			{
-				if (SelectUnit(selectedUnit)){
-					constructors.Add(selectedUnit.GetComponent<BuilderUnit>());
+				if (selectedUnit.selectable)
+				{
+					if (SelectUnit(selectedUnit))
+					{
+						constructors.Add(selectedUnit.GetComponent<BuilderUnit>());
+					}
 				}
+
 			}
 		}
-		if (constructors.Count > 0 )
+		if (constructors.Count > 0)
 		{
 			buildController.PopulateBuildableList(constructors);
 		}
@@ -112,7 +142,15 @@ public class InputController : MonoBehaviour
 
 	public void RightClick()
 	{
-		if (selectedUnits.Count > 0)
+		if (currentMode == CurrentMode.building)
+		{
+			if (currentMarker)
+			{
+				Destroy(currentMarker.gameObject);
+			}
+			CancelBuild();
+		}
+		else if (selectedUnits.Count > 0)
 		{
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
@@ -175,20 +213,44 @@ public class InputController : MonoBehaviour
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit, 100))
 		{
-			if (hit.collider.tag == "Ground" && !Input.GetButton("Shift"))
+			if (!(currentMarker is MarkerBuild))
 			{
-				Deselect();
+
+				if (hit.collider.tag == "Ground" && !Input.GetButton("Shift"))
+				{
+					Deselect();
+				}
+				else if (hit.collider.tag == "Units")
+				{
+					SelectUnit(hit.collider.gameObject.GetComponent<Unit>());
+				}
 			}
-			else if (hit.collider.tag == "Units")
+			else if (currentMarker)
 			{
-				SelectUnit(hit.collider.gameObject.GetComponent<Unit>());
+				currentMarker.GetComponent<MarkerBuild>().PlaceMarker();
+				
+				if (Input.GetButton("Shift"))
+				{
+					MarkerBuild oldMarker = currentMarker.GetComponent<MarkerBuild>();
+					MarkerBuild newMarker = Instantiate(buildMarker) as MarkerBuild;
+					newMarker.unitToBuild = oldMarker.unitToBuild;
+					newMarker.builders = oldMarker.builders;
+					newMarker.numUnits = oldMarker.numUnits;
+					currentMarker = newMarker;
+				}
+				else
+				{
+					CancelBuild();
+				}
+
 			}
+
 		}
 	}
 
 	public void Deselect()
 	{
-
+		currentMode = CurrentMode.idle;
 		if (selectedUnits.Count > 0)
 		{
 			foreach (Unit unit in selectedUnits)
@@ -211,12 +273,13 @@ public class InputController : MonoBehaviour
 		selectedUnit.selectionIndicator.SetActive(true);
 		selectedUnit.iconCam.SetActive(true);
 		selectedUnits.Add(selectedUnit);
+		currentMode = CurrentMode.selectedUnit;
 		if (selectedUnit.builderType != BuilderTypes.none)
 		{
 			return true;
 		}
 		return false;
-		
+
 	}
 
 	private void OnGUI()
@@ -226,4 +289,20 @@ public class InputController : MonoBehaviour
 			GUI.DrawTexture(selectionBoxUI, box);
 		}
 	}
+
+	private void CancelBuild()
+	{
+		print("Cancelling build");
+		Destroy(currentMarker.gameObject);
+		currentMarker = null;
+		currentMode = CurrentMode.idle;
+
+	}
+}
+
+public enum CurrentMode
+{
+	idle,
+	selectedUnit,
+	building,
 }

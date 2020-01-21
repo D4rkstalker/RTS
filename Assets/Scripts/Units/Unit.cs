@@ -24,9 +24,9 @@ public class Unit : MonoBehaviour
 	public Unit target;
 	[System.NonSerialized]
 	public Unit assistTarget;
-	[System.NonSerialized]
+	//[System.NonSerialized]
 	public Marker currentMarker;
-	[System.NonSerialized]
+	//[System.NonSerialized]
 	public Tasks task;
 	[System.NonSerialized]
 	public BuilderTypes builderType = BuilderTypes.none;
@@ -126,6 +126,7 @@ public class Unit : MonoBehaviour
 	{
 		if (marker)
 		{
+			
 			marker.numUnits--;
 			markers.Remove(marker);
 		}
@@ -134,7 +135,6 @@ public class Unit : MonoBehaviour
 			if (markers.Count <= 0)
 			{
 				task = Tasks.Idle;
-
 				currentMarker = null;
 
 			}

@@ -40,4 +40,32 @@ public class UnitList : MonoBehaviour
 		}
 		return buildableUnits;
 	}
+
+	public List<Unit> GetUnitByCategory(List<Categories> categories)
+	{
+		List<Unit> buildableUnits = new List<Unit>();
+		bool buildable = false;
+		foreach (Unit unit in units)
+		{
+			foreach(Categories category in categories)
+			{
+				if (unit.categories.Contains(category))
+				{
+					buildable = true;
+					
+				}
+				else
+				{
+					buildable = false;
+					break;
+				}
+			}
+			if (buildable)
+			{
+				buildableUnits.Add(unit);
+				buildable = false;
+			}
+		}
+		return buildableUnits;
+	}
 }

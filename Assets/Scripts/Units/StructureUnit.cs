@@ -4,4 +4,5 @@ using UnityEngine;
 
 public class StructureUnit : Unit
 {
+	public bool massExtractor;
 }

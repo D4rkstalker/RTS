@@ -13,6 +13,13 @@ public class BuildController : MonoBehaviour
 	public BuildIcon buildIcon;
 
 	public List<BuildIcon> activeBuildIcons;
+
+	private InputController ic;
+	void Start()
+	{
+		ic = gameObject.GetComponent<InputController>();
+	}
+
 	public void PopulateBuildableList(List<BuilderUnit> factories)
 	{
 		buildable = gameObject.transform.parent.GetComponent<UnitList>().GetBuildables(factories);
@@ -25,6 +32,7 @@ public class BuildController : MonoBehaviour
 			icon.SetUpIcon();
 			icon.transform.SetParent(buildablePanel.transform,false);
 			icon.builders = factories;
+			icon.ic = ic;
 			activeBuildIcons.Add(icon);
 		}
 	}
