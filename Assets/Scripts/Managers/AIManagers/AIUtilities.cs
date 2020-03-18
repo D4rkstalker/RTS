@@ -1,9 +1,22 @@
-﻿using System.Collections;
+﻿using AIStateInstances;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 public class AIUtilities : MonoBehaviour
 {
+
+	public static void BuildStructure(Vector3 position, List<Categories> categories, Unit constructor, AIMain aiMain,InstanceGroup ig)
+	{
+		MarkerBuild buildMarker = Instantiate(aiMain.markerBuild) as MarkerBuild;
+		buildMarker.transform.position = position;
+		buildMarker.unitToBuild = aiMain.unitList.GetUnitByCategory(categories)[0];
+		//print("Building at " + buildMarker.unitToBuild.transform.position.ToString());
+		buildMarker.builders.Add(constructor.GetComponent<BuilderUnit>());
+		buildMarker.numUnits = 1;
+		constructor.AddMarker(buildMarker.unitToBuild, buildMarker, true, Tasks.Building);
+		constructor.IG = ig;
+	}
+
 	public static List<Unit> GetAllUnitsOnMap(int player)
 	{
 		List<Unit> units = new List<Unit>();
@@ -39,20 +52,27 @@ public class AIUtilities : MonoBehaviour
 		ConstructionUnit[] temp = (ConstructionUnit[])FindObjectsOfType(typeof(ConstructionUnit));
 		foreach (ConstructionUnit cunit in temp)
 		{
-			if (cunit.self.player == player && cunit.self.selectable)
+			try
 			{
-				if (idleOnly)
+				if (cunit.self.player == player && cunit.self.selectable)
 				{
-					if(cunit.self.task == Tasks.Idle)
+					if (idleOnly)
+					{
+						if (cunit.self.task == Tasks.Idle)
+						{
+							units.Add(cunit.self);
+						}
+
+					}
+					else
 					{
 						units.Add(cunit.self);
 					}
-						
 				}
-				else
-				{
-					units.Add(cunit.self);
-				}
+			}
+			catch
+			{
+
 			}
 		}
 		return units;
@@ -60,11 +80,12 @@ public class AIUtilities : MonoBehaviour
 
 	public static List<Unit> IdleCheck(List<Unit> units)
 	{
-		foreach(Unit unit in units)
+		List<Unit> idleUnits = new List<Unit>();
+		foreach (Unit unit in units)
 		{
-			if(unit.task != Tasks.Idle)
+			if (unit.task == Tasks.Idle)
 			{
-				units.Remove(unit); 
+				idleUnits.Add(unit);
 			}
 		}
 		return units;

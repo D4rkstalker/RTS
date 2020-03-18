@@ -91,9 +91,12 @@
     <Compile Include="Assets\Scripts\Defines\Tasks.cs" />
     <Compile Include="Assets\Scripts\Defines\WeaponTypes.cs" />
     <Compile Include="Assets\Scripts\Managers\AIManagers\AIMain.cs" />
+    <Compile Include="Assets\Scripts\Managers\AIManagers\AIStateInstances.cs" />
     <Compile Include="Assets\Scripts\Managers\AIManagers\AIStates.cs" />
     <Compile Include="Assets\Scripts\Managers\AIManagers\AIUtilities.cs" />
+    <Compile Include="Assets\Scripts\Managers\AIManagers\BuilderGroupManager.cs" />
     <Compile Include="Assets\Scripts\Managers\AIManagers\EconomyManager.cs" />
+    <Compile Include="Assets\Scripts\Managers\AIManagers\ExpansionManager.cs" />
     <Compile Include="Assets\Scripts\Managers\AIManagers\UnitsManager.cs" />
     <Compile Include="Assets\Scripts\Managers\BuildController.cs" />
     <Compile Include="Assets\Scripts\Managers\CameraControl.cs" />

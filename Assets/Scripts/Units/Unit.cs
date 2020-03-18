@@ -1,4 +1,5 @@
-﻿using Assets.Scripts;
+﻿using AIStateInstances;
+using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -36,6 +37,8 @@ public class Unit : MonoBehaviour
 	public BuilderUnit builder;
 	//[System.NonSerialized]
 	public float buildProgress = 0f;
+
+	public InstanceGroup IG;
 
 	void Awake()
 	{
@@ -217,6 +220,7 @@ public class Unit : MonoBehaviour
 			gameObject.GetComponent<MobileUnit>().agent.isStopped = false;
 		}
 		target = null;
+		IG = null;
 	}
 
 	public virtual void OnEnemyKill(MarkerAttack marker)

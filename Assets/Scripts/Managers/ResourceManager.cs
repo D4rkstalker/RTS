@@ -13,6 +13,7 @@ public class ResourceManager : MonoBehaviour
 	public float mass, massCap, massTrend;
 	public float currentUnits;
 	public float unitCap;
+	public float totalMassIn, totalEnergyIn;
 
 	private float oldMass, oldEnergy;
 

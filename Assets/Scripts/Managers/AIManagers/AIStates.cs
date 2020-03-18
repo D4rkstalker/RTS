@@ -11,3 +11,12 @@ public enum AIStates
 	Attacking,
 	Defending,
 }
+
+public enum ResourceState
+{
+	NeedMass,
+	NeedEnergy,
+	OK,
+	SpendMass,
+	SpendEnergy,
+}

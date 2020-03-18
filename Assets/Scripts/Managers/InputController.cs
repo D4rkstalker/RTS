@@ -292,7 +292,6 @@ public class InputController : MonoBehaviour
 
 	private void CancelBuild()
 	{
-		print("Cancelling build");
 		Destroy(currentMarker.gameObject);
 		currentMarker = null;
 		currentMode = CurrentMode.idle;

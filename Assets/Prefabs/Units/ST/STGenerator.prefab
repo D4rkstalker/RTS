@@ -220,7 +220,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2451633865763027233}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 27.869694, y: 0.00000011920929, z: -291.68628}
+  m_LocalPosition: {x: 50, y: 0, z: -321}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3498407240702362191}
@@ -260,9 +260,10 @@ MonoBehaviour:
   selectionIndicator: {fileID: 8110920215843401888}
   iconCam: {fileID: 7447079070601539870}
   mainGun: {fileID: 0}
-  categories: 0200000004000000
+  categories: 020000000800000004000000
   icon: {fileID: 0}
   currentMarker: {fileID: 0}
+  task: 0
   buildProgress: 0
   massExtractor: 0
 --- !u!114 &5207175918013200003
