@@ -7,6 +7,8 @@ public class Marker : MonoBehaviour
 {
 	public int numUnits = 1;
 
+	public AIMain AIBrain;
+
 	public virtual void OnCreateMarker()
 	{
 		StartCoroutine(UpdateLoop());
@@ -17,7 +19,7 @@ public class Marker : MonoBehaviour
 		while (true)
 		{
 			UpdateMarker();
-			yield return null;//new WaitForSeconds(GlobalSettings.GameSpeed);
+			yield return new WaitForSeconds(GlobalSettings.GameSpeed);
 
 		}
 	}
@@ -25,13 +27,18 @@ public class Marker : MonoBehaviour
 	{
 		if (numUnits <= 0)
 		{
-			Destroy(gameObject);
+			DeleteMarker();
 		}
 	}
 
 	public void Start()
 	{
 		OnCreateMarker();
+	}
+
+	public virtual void DeleteMarker()
+	{
+		Destroy(gameObject);
 	}
 
 }

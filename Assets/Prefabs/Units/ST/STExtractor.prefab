@@ -108,7 +108,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1340486429328110901}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -280.91}
+  m_LocalPosition: {x: 0, y: 0, z: -288.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8614122855418555234}
@@ -144,7 +144,7 @@ MonoBehaviour:
   mass: 10
   energy: 10
   buildtime: 20
-  player: 0
+  playerID: 0
   selectionIndicator: {fileID: 7065732026357021994}
   iconCam: {fileID: 1580820014025789449}
   mainGun: {fileID: 0}
@@ -153,6 +153,7 @@ MonoBehaviour:
   currentMarker: {fileID: 0}
   task: 0
   buildProgress: 0
+  player: {fileID: 0}
   massExtractor: 1
 --- !u!114 &6582725587596800515
 MonoBehaviour:

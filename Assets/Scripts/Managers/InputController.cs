@@ -20,7 +20,6 @@ public class InputController : MonoBehaviour
 	public MarkerBuild buildMarker;
 	public Marker currentMarker;
 	public CurrentMode currentMode;
-
 	private Rect selectionBoxUI;
 	private BuildController buildController;
 	// Start is called before the first frame update
@@ -177,7 +176,7 @@ public class InputController : MonoBehaviour
 				else if (hit.collider.tag == "Selectable")
 				{
 					Unit target = hit.collider.gameObject.GetComponent<Unit>();
-					if (selectedUnits[0].player != target.player)
+					if (selectedUnits[0].playerID != target.playerID)
 					{
 						MarkerAttack marker = Instantiate(attackMarker, hit.point, transform.rotation) as MarkerAttack;
 						marker.target = target;

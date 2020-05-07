@@ -69,7 +69,7 @@ public class Projectile : MonoBehaviour
 	{
 		if (other.gameObject.GetComponent<Unit>() != null)
 		{
-			if(other.gameObject.GetComponent<Unit>().player != player) {
+			if(other.gameObject.GetComponent<Unit>().playerID != player) {
 				target = other.gameObject.GetComponent<Unit>();
 				OnImpact();
 			}

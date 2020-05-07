@@ -102,7 +102,7 @@ public class Turret : MonoBehaviour
 			Projectile bullet = Instantiate(projectile, muzzle.transform.position, transform.rotation) as Projectile;
 			bullet.damage = damage;
 			bullet.transform.Rotate(new Vector3(0, Random.Range(firingVariation, -firingVariation), 0));
-			bullet.player = parentUnit.player;
+			bullet.player = parentUnit.playerID;
 			bullet.timeOut *= projectileLifetimeMulti;
 			if (bullet.tracking)
 			{
@@ -113,7 +113,7 @@ public class Turret : MonoBehaviour
 		}
 		else if (wType == WeaponTypes.Beam)
 		{
-			StartCoroutine(gameObject.GetComponent<LaserMachine>().Fire(beamDuration, damage, parentUnit.player, maxRange * beamLengthMulti));
+			StartCoroutine(gameObject.GetComponent<LaserMachine>().Fire(beamDuration, damage, parentUnit.playerID, maxRange * beamLengthMulti));
 		}
 	}
 
@@ -152,7 +152,7 @@ public class Turret : MonoBehaviour
 			Unit target = c.gameObject.GetComponent<Unit>();
 			if (target != null)
 			{
-				if ((target.player != parentUnit.player) && (Vector3.Distance(target.transform.position, parentUnit.transform.position) >= minRange) && target.targetable)
+				if ((target.playerID != parentUnit.playerID) && (Vector3.Distance(target.transform.position, parentUnit.transform.position) >= minRange) && target.targetable)
 				{
 					validTargets.Add(target);
 				}

@@ -5,14 +5,17 @@ using UnityEngine;
 public class AIUtilities : MonoBehaviour
 {
 
-	public static void BuildStructure(Vector3 position, List<Categories> categories, Unit constructor, AIMain aiMain,InstanceGroup ig)
+	public static void BuildStructure(Vector3 position, List<Categories> categories, Unit constructor, AIMain aiMain,InstanceGroup ig, Categories mainCategory)
 	{
 		MarkerBuild buildMarker = Instantiate(aiMain.markerBuild) as MarkerBuild;
+		buildMarker.AIBrain = aiMain;
+		buildMarker.mainCategory = mainCategory;
 		buildMarker.transform.position = position;
 		buildMarker.unitToBuild = aiMain.unitList.GetUnitByCategory(categories)[0];
 		//print("Building at " + buildMarker.unitToBuild.transform.position.ToString());
 		buildMarker.builders.Add(constructor.GetComponent<BuilderUnit>());
 		buildMarker.numUnits = 1;
+		buildMarker.PlaceMarker();
 		constructor.AddMarker(buildMarker.unitToBuild, buildMarker, true, Tasks.Building);
 		constructor.IG = ig;
 	}
@@ -23,7 +26,7 @@ public class AIUtilities : MonoBehaviour
 		Unit[] temp = (Unit[])FindObjectsOfType(typeof(Unit));
 		foreach (Unit unit in temp)
 		{
-			if (unit.player == player && unit.selectable)
+			if (unit.playerID == player && unit.selectable)
 			{
 				units.Add(unit);
 			}
@@ -37,7 +40,7 @@ public class AIUtilities : MonoBehaviour
 		FactoryUnit[] temp = (FactoryUnit[])FindObjectsOfType(typeof(FactoryUnit));
 		foreach (FactoryUnit unit in temp)
 		{
-			if (unit.player == player)
+			if (unit.playerID == player)
 			{
 				units.Add(unit);
 			}
@@ -54,7 +57,7 @@ public class AIUtilities : MonoBehaviour
 		{
 			try
 			{
-				if (cunit.self.player == player && cunit.self.selectable)
+				if (cunit.self.playerID == player && cunit.self.selectable)
 				{
 					if (idleOnly)
 					{
@@ -95,7 +98,7 @@ public class AIUtilities : MonoBehaviour
 	{
 		Collider[] hitColliders = Physics.OverlapSphere(center, radius, LayerMask.GetMask("Units"));
 		List<MassDeposit> massPoints = new List<MassDeposit>();
-		print(hitColliders.Length);
+		//print(hitColliders.Length);
 		foreach (Collider collider in hitColliders)
 		{
 			MassDeposit massPoint = collider.GetComponent<MassDeposit>();

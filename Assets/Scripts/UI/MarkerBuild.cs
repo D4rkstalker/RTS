@@ -11,7 +11,7 @@ public class MarkerBuild : Marker
 
 	private bool canBePlaced = true;
 	private bool placed = false;
-
+	public Categories mainCategory;
 
 	public override void OnCreateMarker()
 	{
@@ -29,7 +29,7 @@ public class MarkerBuild : Marker
 				no.SetActive(true);
 			}
 		}
-		else if (!placed)
+		else
 		{
 			no.SetActive(false);
 		}
@@ -39,8 +39,12 @@ public class MarkerBuild : Marker
 			{
 				builder.GetComponent<MobileUnit>().UpdateMarker(this);
 			}
-			Destroy(gameObject);
+			//if (AIBrain != null)
+			//{
+			//	AIBrain.building.Remove(mainCategory);
+			//}
 
+			//DeleteMarker();
 		}
 	}
 

@@ -33,6 +33,19 @@ namespace Assets.Scripts.ScriptingUtilities
 	}
 	public class ScriptingUtilities : MonoBehaviour
 	{
+		public static Player GetPlayerByID(int pid)
+		{
+			Player[] temp = (Player[])FindObjectsOfType(typeof(Player));
+			foreach (Player player in temp)
+			{
+				if (pid == player.playerID)
+				{
+					return player;
+				}
+			}
+			return null;
+		}
+
 		public static Vector3 FirstOrderIntercept
 		(
 			Vector3 shooterPosition,

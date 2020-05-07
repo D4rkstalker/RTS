@@ -6,4 +6,6 @@ public class Player : MonoBehaviour
 {
 	public int playerID;
 	public Categories faction;
+	public bool isAI = false;
+	public AIMain ai;
 }

@@ -8,7 +8,7 @@ public class BuilderUnit : MonoBehaviour
 	public Buildpoint buildPoint;
 	public float buildPower;
 	public List<Categories> buildableCategories;
-	public int player; 
+	public int playerID; 
 	public Unit self;
 
 	[System.NonSerialized]
@@ -33,11 +33,11 @@ public class BuilderUnit : MonoBehaviour
 	public virtual void OnCreate()
 	{
 		self = gameObject.GetComponent<Unit>();
-		player = self.player;
+		playerID = self.playerID;
 		GameObject[] results = GameObject.FindGameObjectsWithTag("PlayerManager");
 		foreach (GameObject result in results)
 		{
-			if (result.GetComponent<Player>().playerID == player)
+			if (result.GetComponent<Player>().playerID == playerID)
 			{
 				resourceManager = result.GetComponent<ResourceManager>();
 			}
@@ -103,6 +103,10 @@ public class BuilderUnit : MonoBehaviour
 
 	public virtual void OnUnitBuilt(Unit unitbuilt)
 	{
+		if (self.player.isAI)
+		{
+			self.player.ai.OnUnitBuiltCallback(unitbuilt);
+		}
 		if (repeat)
 		{
 			buildQueue.AddFirst(buildQueue.First.Value);
@@ -120,7 +124,7 @@ public class BuilderUnit : MonoBehaviour
 			return false;
 		}
 		currentUnit = Instantiate(unitToSpawn, buildPoint.transform.position, new Quaternion()) as Unit;
-		currentUnit.player = player;
+		currentUnit.playerID = playerID;
 		currentUnit.buildProgress = 0;
 		currentUnit.OnCreate();
 		return true;

@@ -12,7 +12,7 @@ public class GameStartScript : MonoBehaviour
 		foreach(Unit unit in startingUnits)
 		{
 			Unit current = Instantiate(unit,transform) as Unit;
-			current.player = player;
+			current.playerID = player;
 			current.buildProgress = current.buildtime;
 		}
 	}

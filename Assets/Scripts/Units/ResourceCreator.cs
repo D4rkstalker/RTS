@@ -13,7 +13,7 @@ public class ResourceCreator : MonoBehaviour
 
 	public virtual void OnCreate()
 	{
-		player = gameObject.GetComponent<Unit>().player;
+		player = gameObject.GetComponent<Unit>().playerID;
 		GameObject[] results = GameObject.FindGameObjectsWithTag("PlayerManager");
 		foreach (GameObject result in results)
 		{

@@ -9,9 +9,11 @@ public class EconomyManager : MonoBehaviour
 	public List<MassDeposit> massPoints;
 	public int massScanRadius;
 	public int badMassThreshold;
+
 	private float sleepTime;
 	private AIMain aiMain;
 	private BuilderGroupManager bgm;
+
 
 	public virtual void InitEcoAIBrain()
 	{
@@ -30,11 +32,11 @@ public class EconomyManager : MonoBehaviour
 
 	public void BuildResourceCheck()
 	{
-		if (aiMain.energyStatus < 0)
+		if (aiMain.energyStatus < 0 && !aiMain.building.Contains(Categories.EnergyCreator))
 		{
 			BuildEnergy();
 		}
-		else if (aiMain.massStatus < 0)
+		else if (aiMain.massStatus < 0 && !aiMain.building.Contains(Categories.MassCreator))
 		{
 			BuildMass();
 		}
@@ -44,13 +46,12 @@ public class EconomyManager : MonoBehaviour
 	{
 		if(bgm.CountInstances(InstanceTypes.EnergyBuilder) < bgm.energyInstanceCounts)
 		{
-
-			print("Building energy");
 			Vector3 placementPos = aiMain.PickBuildLocation();
 			if (aiMain.ConstructorCheck(placementPos))
 			{
-				print("Constructor acquired for " + aiMain.faction);
-				AIUtilities.BuildStructure(placementPos, new List<Categories>() { Categories.EnergyCreator, aiMain.faction, Categories.Building }, aiMain.constructors[0], aiMain, new InstanceGroup(InstanceTypes.EnergyBuilder,1));
+				//print("Constructor acquired for " + aiMain.faction);
+				AIUtilities.BuildStructure(placementPos, new List<Categories>() { Categories.EnergyCreator, aiMain.faction, Categories.Building }, aiMain.constructors[0], aiMain, new InstanceGroup(InstanceTypes.EnergyBuilder,1),Categories.EnergyCreator);
+				aiMain.building.Add(Categories.EnergyCreator);
 			}
 
 		}
@@ -67,9 +68,11 @@ public class EconomyManager : MonoBehaviour
 				InstanceGroup ig = new InstanceGroup( InstanceTypes.MassBuilder,1);
 				foreach (MassDeposit massPoint in massPoints)
 				{
-					AIUtilities.BuildStructure(massPoint.transform.position, new List<Categories>() { Categories.MassCreator, aiMain.faction, Categories.Building },aiMain.constructors[0], aiMain,ig);
+					AIUtilities.BuildStructure(massPoint.transform.position, new List<Categories>() { Categories.MassCreator, aiMain.faction, Categories.Building },aiMain.constructors[0], aiMain,ig,Categories.MassCreator);
 				}
 				bgm.instanceGroups.Add(ig);
+				aiMain.building.Add(Categories.MassCreator);
+
 			}
 			else
 			{

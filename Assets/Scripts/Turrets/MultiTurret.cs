@@ -18,7 +18,7 @@ public class MultiTurret : Turret
 			Projectile bullet = Instantiate(projectile, firePoint.transform.position, transform.rotation) as Projectile;
 			bullet.damage = damage;
 			bullet.transform.Rotate(new Vector3(0, Random.Range(firingVariation, -firingVariation), 0));
-			bullet.player = parentUnit.player;
+			bullet.player = parentUnit.playerID;
 			bullet.timeOut *= projectileLifetimeMulti;
 			if (bullet.tracking)
 			{
@@ -38,7 +38,7 @@ public class MultiTurret : Turret
 				Projectile bullet = Instantiate(projectile, firePoint.transform.position, transform.rotation) as Projectile;
 				bullet.damage = damage;
 				bullet.transform.Rotate(new Vector3(0, Random.Range(firingVariation, -firingVariation), 0));
-				bullet.player = parentUnit.player;
+				bullet.player = parentUnit.playerID;
 				bullet.timeOut *= projectileLifetimeMulti;
 				if (bullet.tracking)
 				{

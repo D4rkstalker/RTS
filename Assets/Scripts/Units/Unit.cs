@@ -3,6 +3,7 @@ using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Assets.Scripts.ScriptingUtilities;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
@@ -11,7 +12,7 @@ public class Unit : MonoBehaviour
 	public bool targetable = true;
 	public string unitName;
 	public float shield, maxShield, armor, maxArmor, hull, maxHull, crew, maxCrew, turnRate, mass, energy, buildtime;
-	public int player;
+	public int playerID;
 	public GameObject selectionIndicator, iconCam;
 	public Turret mainGun;
 	public List<Categories> categories;
@@ -37,8 +38,8 @@ public class Unit : MonoBehaviour
 	public BuilderUnit builder;
 	//[System.NonSerialized]
 	public float buildProgress = 0f;
-
 	public InstanceGroup IG;
+	public Player player;
 
 	void Awake()
 	{
@@ -61,6 +62,7 @@ public class Unit : MonoBehaviour
 
 	public virtual void OnCreate()
 	{
+		player = ScriptingUtilities.GetPlayerByID(playerID);
 		selectable = false;
 		selectionIndicator.SetActive(false);
 		//Setup builder units

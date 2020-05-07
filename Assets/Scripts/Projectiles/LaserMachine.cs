@@ -131,7 +131,7 @@ namespace Lightbug.LaserMachine
 						{
 							element.lineRenderer.SetPosition(1, hitInfo3D.point);							
 							Unit target = hitInfo3D.collider.gameObject.GetComponent<Unit>();
-							if (target.player != player)
+							if (target.playerID != player)
 							{
 								OnImpact(element, hitInfo3D, damage, target);
 							}

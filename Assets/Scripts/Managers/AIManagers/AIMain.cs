@@ -26,6 +26,8 @@ public class AIMain: MonoBehaviour
 	public List<ExpansionManager> expansions;
 	public ResourceManager resourceManager;
 
+	public List<Categories> building;
+
 	public virtual void InitAIBrain()
 	{
 		bgm = gameObject.GetComponent<BuilderGroupManager>();
@@ -115,6 +117,16 @@ public class AIMain: MonoBehaviour
 	{
 		InitAIBrain();
 		StartCoroutine(AIUpdateLoop());
+	}
+
+	public void OnUnitBuiltCallback(Unit unit)
+	{
+		foreach (Categories category in building)
+		{
+			if (unit.categories.Contains(category)){
+				building.Remove(category);
+			}
+		}
 	}
 
 }
