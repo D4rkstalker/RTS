@@ -6,6 +6,7 @@ using UnityEngine;
 using Assets.Scripts.ScriptingUtilities;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using System.Threading.Tasks;
 
 public class Unit : MonoBehaviour
 {
@@ -29,7 +30,7 @@ public class Unit : MonoBehaviour
 	//[System.NonSerialized]
 	public Marker currentMarker;
 	//[System.NonSerialized]
-	public Tasks task;
+	public Tasks task = Tasks.Idle;
 	[System.NonSerialized]
 	public BuilderTypes builderType = BuilderTypes.none;
 	[System.NonSerialized]
@@ -38,12 +39,18 @@ public class Unit : MonoBehaviour
 	public BuilderUnit builder;
 	//[System.NonSerialized]
 	public float buildProgress = 0f;
-	public InstanceGroup IG;
 	public Player player;
+	public AIUnitRoles AIRole = AIUnitRoles.Unassigned;
 
 	void Awake()
 	{
 		OnCreate();
+	}
+
+	public virtual void OnQueueFinished()
+	{
+		//AIRole = AIUnitRoles.Unassigned;
+		task = Tasks.Idle;
 	}
 
 	public IEnumerator CompletionCheck()
@@ -139,7 +146,7 @@ public class Unit : MonoBehaviour
 		{
 			if (markers.Count <= 0)
 			{
-				task = Tasks.Idle;
+				OnQueueFinished();
 				currentMarker = null;
 
 			}
@@ -191,7 +198,7 @@ public class Unit : MonoBehaviour
 	public virtual void StopOrder()
 	{
 		ClearOrders();
-		task = Tasks.Idle;
+		OnQueueFinished();
 		if (target)
 		{
 			target = null;
@@ -222,7 +229,6 @@ public class Unit : MonoBehaviour
 			gameObject.GetComponent<MobileUnit>().agent.isStopped = false;
 		}
 		target = null;
-		IG = null;
 	}
 
 	public virtual void OnEnemyKill(MarkerAttack marker)

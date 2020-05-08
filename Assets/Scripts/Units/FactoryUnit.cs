@@ -10,7 +10,6 @@ public class FactoryUnit : BuilderUnit
 	public override void OnCreate()
 	{
 		base.OnCreate();
-		self = gameObject.GetComponent<Unit>();
 		self.builderType = BuilderTypes.factory;
 	}
 	public void SetRallyPoint(Vector3 point)

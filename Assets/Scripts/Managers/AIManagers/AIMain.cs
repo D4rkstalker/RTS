@@ -20,7 +20,7 @@ public class AIMain: MonoBehaviour
 	public MarkerBuild markerBuild;
 
 
-	public BuilderGroupManager bgm;
+	public BuilderGroupManager builderGroupManager;
 	public EconomyManager economyManager;
 	public UnitsManager unitsManager;
 	public List<ExpansionManager> expansions;
@@ -28,9 +28,15 @@ public class AIMain: MonoBehaviour
 
 	public List<Categories> building;
 
+	public Unit GetConstructor(Vector3 conRallyPoint,AIUnitRoles UnitRole)
+	{
+		return unitsManager.ConstructorCheck(conRallyPoint, UnitRole, faction);
+		
+	}
+
 	public virtual void InitAIBrain()
 	{
-		bgm = gameObject.GetComponent<BuilderGroupManager>();
+		builderGroupManager = gameObject.GetComponent<BuilderGroupManager>();
 		economyManager = gameObject.GetComponent<EconomyManager>();
 		unitsManager = gameObject.GetComponent<UnitsManager>();
 		player = gameObject.transform.parent.GetComponent<Player>().playerID;
@@ -64,29 +70,6 @@ public class AIMain: MonoBehaviour
 
 	}
 
-	public virtual bool ConstructorCheck(Vector3 conRallyPoint)
-	{
-		if (constructors.Count < 1)
-		{
-			constructors = AIUtilities.GetAllConstructors(false, player);
-			if (constructors.Count < 1)
-			{
-				unitsManager.BuildUnits(1, new List<Categories>() { Categories.Engineer, faction }, conRallyPoint);
-				return false;
-			}
-			else
-			{
-				constructors = AIUtilities.IdleCheck(constructors);
-				if (constructors.Count < 1)
-				{
-					return false;
-				}
-
-			}
-
-		}
-		return true;
-	}
 	public virtual Vector3 PickBuildLocation()
 	{
 		if (placementPositions.Count < 1)

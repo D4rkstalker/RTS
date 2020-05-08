@@ -5,7 +5,7 @@ using UnityEngine;
 public class AIUtilities : MonoBehaviour
 {
 
-	public static void BuildStructure(Vector3 position, List<Categories> categories, Unit constructor, AIMain aiMain,InstanceGroup ig, Categories mainCategory)
+	public static void BuildStructure(Vector3 position, List<Categories> categories, Unit constructor, AIMain aiMain, Categories mainCategory)
 	{
 		MarkerBuild buildMarker = Instantiate(aiMain.markerBuild) as MarkerBuild;
 		buildMarker.AIBrain = aiMain;
@@ -17,7 +17,6 @@ public class AIUtilities : MonoBehaviour
 		buildMarker.numUnits = 1;
 		buildMarker.PlaceMarker();
 		constructor.AddMarker(buildMarker.unitToBuild, buildMarker, true, Tasks.Building);
-		constructor.IG = ig;
 	}
 
 	public static List<Unit> GetAllUnitsOnMap(int player)
@@ -79,6 +78,19 @@ public class AIUtilities : MonoBehaviour
 			}
 		}
 		return units;
+	}
+
+	public static List<Unit> AssignmentCheck(List<Unit> units)
+	{
+		List<Unit> ungroupedUnits = new List<Unit>();
+		foreach (Unit unit in units)
+		{
+			if (unit.AIRole == AIUnitRoles.Unassigned)
+			{
+				ungroupedUnits.Add(unit);
+			}
+		}
+		return ungroupedUnits;
 	}
 
 	public static List<Unit> IdleCheck(List<Unit> units)

@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class BuilderUnit : MonoBehaviour
@@ -50,6 +51,10 @@ public class BuilderUnit : MonoBehaviour
 		{
 			OnStartBuild();
 		}
+		if(buildQueue.Count < 1 && self.task != Tasks.Idle)
+		{
+			self.OnQueueFinished();
+		}
 	}
 
 	IEnumerator UpdateBuilderLoop()
@@ -73,12 +78,14 @@ public class BuilderUnit : MonoBehaviour
 			eCost = -(currentUnit.energy * buildPower / currentUnit.buildtime);
 			mCost = -(currentUnit.mass * buildPower / currentUnit.buildtime);
 			StartCoroutine(BuildTick());
+			
 		}
 		else
 		{
 			buildQueue.RemoveFirst();
 			currentUnit = null;
 		}
+		
 	}
 
 	public virtual IEnumerator BuildTick()
@@ -127,6 +134,7 @@ public class BuilderUnit : MonoBehaviour
 		currentUnit.playerID = playerID;
 		currentUnit.buildProgress = 0;
 		currentUnit.OnCreate();
+		self.task = Tasks.Building;
 		return true;
 	}
 
@@ -151,8 +159,8 @@ public class BuilderUnit : MonoBehaviour
 
 	public void Start()
 	{
-		StartCoroutine(UpdateBuilderLoop());
 		OnCreate();
+		StartCoroutine(UpdateBuilderLoop());
 	}
 
 
