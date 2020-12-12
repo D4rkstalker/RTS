@@ -13,7 +13,7 @@ public class StrategicIcon : MonoBehaviour
 		unit = transform.parent.parent.parent.gameObject.GetComponent<Unit>();
 		gameObject.GetComponent<RawImage>().texture = unit.icon;
 	}
-	void LateUpdate()
+	void Update()
 	{
 		transform.position = cam.WorldToScreenPoint(unit.transform.position);
 	}

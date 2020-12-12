@@ -11,15 +11,14 @@ namespace Assets.Scripts
     public class MobileUnit : Unit
     {
 		[System.NonSerialized]
-		public NavMeshAgent agent;
+		public NavigationAgent agent;
 
         public int priority;
 
 		// Start is called before the first frame update
 		public override void OnCreate()
 		{
-			agent = GetComponent<NavMeshAgent>();
-			agent.angularSpeed = turnRate * 10;
+			agent = GetComponent<NavigationAgent>();
 			base.OnCreate();
 		}
 
@@ -41,8 +40,8 @@ namespace Assets.Scripts
 				{
 					target = null;
 				}
-				agent.isStopped = false;
-				agent.destination = marker.transform.position;
+				agent.stopping = false;
+				agent.UpdateDestination(marker.transform.position);
 				task = Tasks.Moving;
 			}
 		}
@@ -52,8 +51,8 @@ namespace Assets.Scripts
 			base.AttackUpdate();
 			if (Vector3.Distance(target.transform.position, transform.position) > mainGun.maxRange)
 			{
-				agent.isStopped = false;
-				agent.destination = target.transform.position;
+				agent.stopping = false;
+				agent.UpdateDestination(target.transform.position);
 			}
 			else
 			{
@@ -66,7 +65,7 @@ namespace Assets.Scripts
 			base.AssistUpdate();
 			if(builderType == BuilderTypes.none || assistTarget.isBuilt)
 			{
-				agent.destination = assistTarget.transform.position;
+				agent.UpdateDestination(assistTarget.transform.position);
 			}
 			else if (builderType == BuilderTypes.engineer)
 			{
@@ -74,16 +73,16 @@ namespace Assets.Scripts
 			}
 		}
 
-		public override void StopOrder()
+		public override void ClearOrders()
 		{
-			base.StopOrder();
+			base.ClearOrders();
 			StopUnitAgent();
 		}
 
 		public virtual void StopUnitAgent()
 		{
-			agent.isStopped = true;
-			agent.ResetPath();
+			agent.StopUnit();
+			agent.ClearDestination();
 		}
 
 		public override void ToggleActive(bool toggle)

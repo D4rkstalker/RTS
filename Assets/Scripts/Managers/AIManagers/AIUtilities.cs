@@ -132,10 +132,17 @@ public class AIUtilities : MonoBehaviour
 		return massPoints;
 	}
 
-	public static List<MassDeposit> GetAllMassDepositsOnMap()
+	public static int GetUnclaimedDeposits()
 	{
-		List<MassDeposit> massPoints = new List<MassDeposit>();
-		massPoints.AddRange((MassDeposit[])FindObjectsOfType(typeof(MassDeposit)));
-		return massPoints;
+		int deposits = 0;
+		GameObject[] massPoints = GameObject.FindGameObjectsWithTag("MassDeposits");
+		foreach(GameObject massPoint in massPoints)
+		{
+			if (!massPoint.GetComponent<MassDeposit>().claimed)
+			{
+				deposits++;
+			}
+		}
+		return deposits;
 	}
 }

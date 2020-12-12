@@ -84,6 +84,7 @@
     <Compile Include="Assets\Scripts\Managers\GameStartScript.cs" />
     <Compile Include="Assets\Scripts\Managers\IconManager.cs" />
     <Compile Include="Assets\Scripts\Managers\InputController.cs" />
+    <Compile Include="Assets\Scripts\Managers\NavigationAgent.cs" />
     <Compile Include="Assets\Scripts\Managers\ResourceManager.cs" />
     <Compile Include="Assets\Scripts\Managers\UIUpdates.cs" />
     <Compile Include="Assets\Scripts\MassDeposit.cs" />

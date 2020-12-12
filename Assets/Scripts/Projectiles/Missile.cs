@@ -23,7 +23,7 @@ public class Missile : Projectile
 			gameObject.GetComponent<Rigidbody>() ? gameObject.GetComponent<Rigidbody>().velocity : Vector3.zero,
 			velocity,
 			target.transform.position,
-			target.GetComponent<MobileUnit>() ? target.GetComponent<MobileUnit>().agent.velocity : Vector3.zero
+			target.GetComponent<MobileUnit>() ? target.GetComponent<MobileUnit>().agent.unitRigidbody.velocity : Vector3.zero
 		);
 
 		Vector3 _direction = (interceptPoint - transform.position).normalized;

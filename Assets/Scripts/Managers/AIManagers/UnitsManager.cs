@@ -30,8 +30,8 @@ public class UnitsManager : MonoBehaviour
             else
             {
                 constructors[0].AIRole = type;
-                unitGroups[type].Append(constructors[0]);
-                print(unitGroups[type].Count);
+                unitGroups[type].Add(constructors[0]);
+                //print(unitGroups[type].Count);
                 return constructors[0];
             }
 

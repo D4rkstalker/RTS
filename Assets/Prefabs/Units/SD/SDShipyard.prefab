@@ -181,7 +181,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5788092511148495716}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 35.946724, y: 0.00000011920929, z: -204.74414}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5404166404491401497}
@@ -218,13 +218,19 @@ MonoBehaviour:
   mass: 100
   energy: 100
   buildtime: 100
-  player: 0
+  playerID: 0
   selectionIndicator: {fileID: 1616355812703695958}
   iconCam: {fileID: 3326397427099617490}
   mainGun: {fileID: 0}
   categories: 010000000400000005000000
   icon: {fileID: 0}
+  currentMarker: {fileID: 0}
+  task: 0
+  aiMain: {fileID: 0}
   buildProgress: 100
+  player: {fileID: 0}
+  AIRole: 2
+  massExtractor: 0
 --- !u!114 &757338219061877457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,14 +246,14 @@ MonoBehaviour:
   buildPoint: {fileID: 8975783889948124942}
   buildPower: 1
   buildableCategories: 0100000003000000
-  player: 0
+  playerID: 0
+  self: {fileID: 0}
   currentUnit: {fileID: 0}
   paused: 0
   repeat: 0
   rallypoint: {fileID: 2886044143236496779}
   moveMarker: {fileID: 4507118481327387650, guid: 0b8d81f7b47e23244a4ed03cfbf8057b,
     type: 3}
-  self: {fileID: 0}
 --- !u!54 &8436017959578776789
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -272,7 +278,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5788092511148495716}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 13.67, y: 10.56, z: 14.9}

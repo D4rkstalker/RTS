@@ -82,6 +82,7 @@ public class BuilderUnit : MonoBehaviour
 		}
 		else
 		{
+			AICallBack(buildQueue.First.Value);
 			buildQueue.RemoveFirst();
 			currentUnit = null;
 		}
@@ -108,17 +109,14 @@ public class BuilderUnit : MonoBehaviour
 		yield return new WaitForSeconds(0.1f);
 	}
 
-	public virtual void OnUnitBuilt(Unit unitbuilt)
+	public virtual void OnUnitBuilt(Unit unit)
 	{
-		if (self.player.isAI)
-		{
-			self.player.ai.OnUnitBuiltCallback(unitbuilt);
-		}
 		if (repeat)
 		{
 			buildQueue.AddFirst(buildQueue.First.Value);
 			
 		}
+		AICallBack(unit);
 		buildQueue.RemoveFirst();
 		currentUnit = null;
 		self.task = Tasks.Idle;
@@ -155,6 +153,24 @@ public class BuilderUnit : MonoBehaviour
 			}
 		}
 		return true;
+	}
+
+	public virtual void OnUnitKilled()
+	{
+		if(buildQueue.Count > 0)
+		{
+			AICallBack(buildQueue.First.Value);
+		}
+	}
+
+
+	public virtual void AICallBack(Unit unit)
+	{
+		if (self.player.isAI)
+		{
+			self.player.ai.OnUnitBuiltCallback(unit);
+		}
+
 	}
 
 	public void Start()

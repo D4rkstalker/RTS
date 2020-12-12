@@ -33,6 +33,47 @@ namespace Assets.Scripts.ScriptingUtilities
 	}
 	public class ScriptingUtilities : MonoBehaviour
 	{
+		public static void PointToTarget(Turret turret, Unit target)
+		{
+			MobileUnit unit = turret.GetComponent<MobileUnit>();
+			Vector3 interceptPoint = target.transform.position;
+			if (turret.leadTarget)
+			{
+				interceptPoint = FirstOrderIntercept(
+					turret.transform.position,
+					 unit ? unit.agent.unitRigidbody.velocity : Vector3.zero,
+					turret.projectileVelocity,
+					target.transform.position,
+					target.GetComponent<MobileUnit>() ? target.GetComponent<MobileUnit>().agent.unitRigidbody.velocity : Vector3.zero
+				);
+
+			}
+			if (turret.mainGun && turret.tType == TurretTypes.Spinal)
+			{
+				PointToTarget(unit.agent,interceptPoint);
+			}
+			else
+			{
+				Vector3 _direction = (interceptPoint - turret.transform.position).normalized;
+
+				Quaternion _lookRotation = Quaternion.LookRotation(_direction);
+
+				turret.transform.rotation = Quaternion.Slerp(turret.transform.rotation, _lookRotation, Time.deltaTime * turret.turnRate);
+
+			}
+		}
+		public static void PointToTarget(NavigationAgent agent, Vector3 target)
+		{
+			Vector3 _direction = (target - agent.transform.position).normalized;
+
+			Quaternion _lookRotation = Quaternion.LookRotation(_direction);
+
+			agent.unit.transform.rotation = Quaternion.Slerp(agent.unit.transform.rotation, _lookRotation, Time.deltaTime * agent.turnrate);
+
+
+		}
+
+
 		public static Player GetPlayerByID(int pid)
 		{
 			Player[] temp = (Player[])FindObjectsOfType(typeof(Player));

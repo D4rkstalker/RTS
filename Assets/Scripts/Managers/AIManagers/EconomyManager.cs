@@ -10,6 +10,7 @@ public class EconomyManager : MonoBehaviour
     public List<MassDeposit> massPoints;
     public int massScanRadius;
     public int badMassThreshold;
+   
 
     private float sleepTime;
     private AIMain aiMain;
@@ -29,6 +30,10 @@ public class EconomyManager : MonoBehaviour
 
         aiMain.energyStatus = EnergyBalanceCheck();
         aiMain.massStatus = MassBalanceCheck();
+        if(AIUtilities.GetUnclaimedDeposits() < 1)
+        {
+            aiMain.allMassClaimed = true;
+        }
         BuildResourceCheck();
     }
 
@@ -38,9 +43,12 @@ public class EconomyManager : MonoBehaviour
         {
             BuildEnergy();
         }
-        else if (aiMain.massStatus < 0 && !aiMain.building.Contains(Categories.MassCreator))
+        else if (aiMain.massStatus < 1 && !aiMain.building.Contains(Categories.MassCreator))
         {
-            BuildMass();
+            if (!aiMain.allMassClaimed)
+            {
+                BuildMass();
+            }
         }
     }
 
@@ -57,10 +65,11 @@ public class EconomyManager : MonoBehaviour
             //print("Constructor acquired for " + aiMain.faction);
             AIUtilities.BuildStructure(energyPlacement, new List<Categories>() { Categories.EnergyCreator, aiMain.faction, Categories.Building }, constructor, aiMain,  Categories.EnergyCreator);
             aiMain.building.Add(Categories.EnergyCreator);
+            energyPlacement = Vector3.zero;
         }
         else
         {
-            print("waiting for constructor");
+            //print("waiting for constructor");
             sleepTime += 10;
         }
 
@@ -71,15 +80,13 @@ public class EconomyManager : MonoBehaviour
     {
         massPoints.Clear();
         massPoints = AIUtilities.GetMassDepositsAroundPoint(transform.position, massScanRadius, true);
-        Unit constructor = aiMain.GetConstructor(energyPlacement, AIUnitRoles.EnergyBuilder);
+        Unit constructor = aiMain.GetConstructor(energyPlacement, AIUnitRoles.MassBuilder);
         if (massPoints.Count > 0)
         {
             if (constructor)
             {
-                foreach (MassDeposit massPoint in massPoints)
-                {
-                    AIUtilities.BuildStructure(massPoint.transform.position, new List<Categories>() { Categories.MassCreator, aiMain.faction, Categories.Building }, constructor, aiMain, Categories.MassCreator);
-                }
+                AIUtilities.BuildStructure(massPoints[0].transform.position, new List<Categories>() { Categories.MassCreator, aiMain.faction, Categories.Building }, constructor, aiMain, Categories.MassCreator);
+                
                 aiMain.building.Add(Categories.MassCreator);
 
             }

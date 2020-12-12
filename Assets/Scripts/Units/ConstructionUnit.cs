@@ -45,13 +45,13 @@ public class ConstructionUnit : BuilderUnit
 			}
 			if (Vector3.Distance(transform.position, destination) > buildRange && self is MobileUnit)
 			{
-				self.GetComponent<NavMeshAgent>().destination = destination;
+				self.GetComponent<NavigationAgent>().UpdateDestination(destination);
 			}
 			if (Vector3.Distance(transform.position, destination) < buildRange)
 			{
 				if (self is MobileUnit)
 				{
-					self.GetComponent<NavMeshAgent>().isStopped = true;
+					self.GetComponent<NavigationAgent>().StopUnit();
 				}
 				OnStartBuild(self.task == Tasks.Assisting);
 			}
@@ -68,7 +68,8 @@ public class ConstructionUnit : BuilderUnit
 		buildPoint.transform.position = unitToSpawn.transform.position;
 		return base.CreateUnit(unitToSpawn);
 	}
-	public override void OnUnitBuilt(Unit unitbuilt)
+
+	public override void OnUnitBuilt(Unit unit)
 	{
 		if(self.task == Tasks.Assisting)
 		{
@@ -76,11 +77,10 @@ public class ConstructionUnit : BuilderUnit
 		}
 		else
 		{
-			base.OnUnitBuilt(unitbuilt);
+			base.OnUnitBuilt(unit);
 		}
 		self.UpdateMarker(self.currentMarker);
-		self.GetComponent<NavMeshAgent>().isStopped = false;
-		self.GetComponent<NavMeshAgent>().ResetPath();
+		self.GetComponent<NavigationAgent>().StopUnit();
 	}
 
 }

@@ -70,6 +70,7 @@ MonoBehaviour:
   beamDuration: 1
   targetUnit: {fileID: 0}
   firing: 0
+  navAgent: {fileID: 0}
 --- !u!114 &5161681825298052850
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,7 +218,7 @@ GameObject:
   - component: {fileID: 5161681825882629709}
   - component: {fileID: 5161681825882629704}
   - component: {fileID: 5161681825882629711}
-  - component: {fileID: 5161681825882629710}
+  - component: {fileID: 9102356579911619682}
   m_Layer: 11
   m_Name: SDFrigate
   m_TagString: Selectable
@@ -270,13 +271,18 @@ MonoBehaviour:
   mass: 15
   energy: 15
   buildtime: 15
-  player: 0
+  playerID: 0
   selectionIndicator: {fileID: 5161681825420313492}
   iconCam: {fileID: 2652273788433220570}
   mainGun: {fileID: 5161681825298052851}
   categories: 01000000030000000a00000010000000
   icon: {fileID: 0}
+  currentMarker: {fileID: 0}
+  task: 0
+  aiMain: {fileID: 0}
   buildProgress: 0
+  player: {fileID: 0}
+  AIRole: 2
   priority: 0
 --- !u!54 &5161681825882629704
 Rigidbody:
@@ -286,11 +292,11 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5161681825882629699}
   serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
+  m_Mass: 10
+  m_Drag: 2
+  m_AngularDrag: 1
   m_UseGravity: 0
-  m_IsKinematic: 1
+  m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
@@ -307,28 +313,34 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.45, z: 1.2137498}
   m_Center: {x: 0, y: 0, z: 0.10687488}
---- !u!195 &5161681825882629710
-NavMeshAgent:
+--- !u!114 &9102356579911619682
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5161681825882629699}
   m_Enabled: 1
-  m_AgentTypeID: 0
-  m_Radius: 0.99
-  m_Speed: 5
-  m_Acceleration: 8
-  avoidancePriority: 50
-  m_AngularSpeed: 100
-  m_StoppingDistance: 0
-  m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
-  m_AutoRepath: 1
-  m_Height: 0.37
-  m_BaseOffset: 0
-  m_WalkableMask: 4294967295
-  m_ObstacleAvoidanceType: 4
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5437789ccf0fae44592d41c21079c415, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unit: {fileID: 5161681825882629709}
+  Facceleration: 4
+  Bacceleration: 2
+  Lacceleration: 0
+  Racceleration: 0
+  maxAccelerationMulti: 2
+  continousAcceleration: 0
+  maxCombatSpeed: 20
+  turnrate: 2
+  turnDist: 10
+  turnSpeedMulti: 1
+  turnTolerance: 35
+  stopping: 0
+  stop: 0
+  facingTarget: 0
+  unitRigidbody: {fileID: 5161681825882629704}
 --- !u!1 &5161681826258424511
 GameObject:
   m_ObjectHideFlags: 0

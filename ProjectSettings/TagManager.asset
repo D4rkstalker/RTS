@@ -10,6 +10,7 @@ TagManager:
   - GameManager
   - PlayerManager
   - GameManagers
+  - MassDeposits
   layers:
   - Default
   - TransparentFX

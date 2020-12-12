@@ -37,6 +37,8 @@ public class Unit : MonoBehaviour
 	public ResourceCreator rc;
 	[System.NonSerialized]
 	public BuilderUnit builder;
+
+	public AIMain aiMain;
 	//[System.NonSerialized]
 	public float buildProgress = 0f;
 	public Player player;
@@ -70,6 +72,10 @@ public class Unit : MonoBehaviour
 	public virtual void OnCreate()
 	{
 		player = ScriptingUtilities.GetPlayerByID(playerID);
+		if (player.isAI)
+		{
+			aiMain = player.ai;
+		}
 		selectable = false;
 		selectionIndicator.SetActive(false);
 		//Setup builder units
@@ -108,7 +114,7 @@ public class Unit : MonoBehaviour
 	{
 		if (hull <= 0)
 		{
-			OnKill();
+			OnKilled();
 		}
 
 		if (target != null && (task == Tasks.Attacking || task == Tasks.Idle))
@@ -198,7 +204,7 @@ public class Unit : MonoBehaviour
 	public virtual void StopOrder()
 	{
 		ClearOrders();
-		OnQueueFinished();
+		
 		if (target)
 		{
 			target = null;
@@ -224,11 +230,8 @@ public class Unit : MonoBehaviour
 		{
 			builder.StopBuild();
 		}
-		if (gameObject.GetComponent<MobileUnit>())
-		{
-			gameObject.GetComponent<MobileUnit>().agent.isStopped = false;
-		}
 		target = null;
+		OnQueueFinished();
 	}
 
 	public virtual void OnEnemyKill(MarkerAttack marker)
@@ -241,25 +244,14 @@ public class Unit : MonoBehaviour
 		UpdateMarker(marker);
 	}
 
-	public virtual void OnKill()
+	public virtual void OnKilled()
 	{
 		ClearOrders();
 		StopAllCoroutines();
+		if (builder) { builder.OnUnitKilled(); }
+		
 		Destroy(gameObject);
 	}
-	public void PointToTarget(Vector3 target)
-	{
-		if (task != Tasks.Moving)
-		{
-			Vector3 _direction = (target - transform.position).normalized;
-
-			Quaternion _lookRotation = Quaternion.LookRotation(_direction);
-
-			transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * turnRate);
-
-		}
-	}
-
 	public virtual void AttackUpdate()
 	{
 

@@ -11,7 +11,7 @@ public class GameStartScript : MonoBehaviour
 		List<Unit> startingUnits = gameObject.transform.parent.GetComponent<GameManager>().startingUnits;
 		foreach(Unit unit in startingUnits)
 		{
-			Unit current = Instantiate(unit,transform) as Unit;
+			Unit current = Instantiate(unit,gameObject.transform) as Unit;
 			current.playerID = player;
 			current.buildProgress = current.buildtime;
 		}

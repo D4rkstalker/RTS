@@ -8,7 +8,7 @@ public class AIMain: MonoBehaviour
 	public bool active = false;
 	public AIStates currentState = AIStates.Initial;
 	public ResourceState resourceState;
-	public int player;
+	public int playerID;
 	public Categories faction;
 	public List<Unit> units;
 	public UnitList unitList;
@@ -18,8 +18,9 @@ public class AIMain: MonoBehaviour
 	public int densityFactor;
 	public List<Vector3> placementPositions;
 	public MarkerBuild markerBuild;
+	public bool allMassClaimed;
 
-
+	public Player player;
 	public BuilderGroupManager builderGroupManager;
 	public EconomyManager economyManager;
 	public UnitsManager unitsManager;
@@ -39,10 +40,13 @@ public class AIMain: MonoBehaviour
 		builderGroupManager = gameObject.GetComponent<BuilderGroupManager>();
 		economyManager = gameObject.GetComponent<EconomyManager>();
 		unitsManager = gameObject.GetComponent<UnitsManager>();
-		player = gameObject.transform.parent.GetComponent<Player>().playerID;
+		player = gameObject.transform.parent.GetComponent<Player>();
 		faction = gameObject.transform.parent.GetComponent<Player>().faction;
 
-		units = AIUtilities.GetAllUnitsOnMap(player);
+		player.isAI = true;
+		player.ai = this;
+		playerID = player.playerID;
+		units = AIUtilities.GetAllUnitsOnMap(playerID);
 
 		GameObject gm = GameObject.FindGameObjectWithTag("GameManager");
 		unitList = gm.GetComponent<UnitList>();
@@ -50,7 +54,7 @@ public class AIMain: MonoBehaviour
 		GameObject[] pms = GameObject.FindGameObjectsWithTag("PlayerManager");
 		foreach (GameObject pm in pms)
 		{
-			if (pm.GetComponent<Player>().playerID == player)
+			if (pm.GetComponent<Player>().playerID == playerID)
 			{
 				resourceManager = pm.GetComponent<ResourceManager>();
 			}
@@ -104,11 +108,9 @@ public class AIMain: MonoBehaviour
 
 	public void OnUnitBuiltCallback(Unit unit)
 	{
-		foreach (Categories category in building)
+		foreach (Categories category in unit.categories)
 		{
-			if (unit.categories.Contains(category)){
-				building.Remove(category);
-			}
+			building.Remove(category);
 		}
 	}
 

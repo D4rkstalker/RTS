@@ -31,14 +31,22 @@ public class Turret : MonoBehaviour
 
 	public Unit targetUnit;
 	public bool firing = false;
+	public NavigationAgent navAgent;
 
-	void Start()
+	public virtual void SetUpTurret()
 	{
 		parentUnit = transform.parent.gameObject.GetComponent<Unit>();
 		targetUnit = null;
 		if (wType == WeaponTypes.Beam)
 		{
 			gameObject.GetComponent<LaserMachine>().SetupLaser(maxRange * beamLengthMulti);
+		}
+		if (tType == TurretTypes.Spinal)
+		{
+			if (parentUnit.GetType() == typeof(MobileUnit))
+			{
+				navAgent = ((MobileUnit)parentUnit).agent;
+			}
 		}
 		StartCoroutine(TurretUpdateLoop());
 	}
@@ -63,7 +71,14 @@ public class Turret : MonoBehaviour
 			}
 			if (Vector3.Distance(targetUnit.transform.position, transform.position) < maxRange * trackRangeMulti)
 			{
-				PointToTarget(targetUnit);
+				if(tType == TurretTypes.Turreted)
+				{
+					ScriptingUtilities.PointToTarget(this, targetUnit);
+				}
+				else if (tType == TurretTypes.Spinal)
+				{
+					ScriptingUtilities.PointToTarget(navAgent, targetUnit.transform.position);
+				}
 			}
 			else
 			{
@@ -180,32 +195,8 @@ public class Turret : MonoBehaviour
 
 	}
 
-	public void PointToTarget(Unit target)
+	private void Start()
 	{
-		Vector3 interceptPoint = target.transform.position;
-		if (leadTarget)
-		{
-			interceptPoint = ScriptingUtilities.FirstOrderIntercept(
-				transform.position,
-				gameObject.GetComponent<MobileUnit>() ? gameObject.GetComponent<MobileUnit>().agent.velocity : Vector3.zero,
-				projectileVelocity,
-				target.transform.position,
-				target.GetComponent<MobileUnit>() ? target.GetComponent<MobileUnit>().agent.velocity : Vector3.zero
-			);
-
-		}
-		if (mainGun && tType == TurretTypes.Spinal)
-		{
-			parentUnit.PointToTarget(interceptPoint);
-		}
-		else
-		{
-			Vector3 _direction = (interceptPoint - transform.position).normalized;
-
-			Quaternion _lookRotation = Quaternion.LookRotation(_direction);
-
-			transform.rotation = Quaternion.Slerp(transform.rotation, _lookRotation, Time.deltaTime * turnRate);
-
-		}
+		SetUpTurret();
 	}
 }
